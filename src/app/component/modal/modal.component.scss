@@ -1,0 +1,39 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(1px);
+}
+
+.modal__close-button {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.modal__close-button button {
+  border: none;
+  background-color: transparent;
+}
+
+.modal__close-button button svg {
+  color: var(--error-color);
+  transition: 0.3s;
+}
+
+.modal__close-button button svg:hover {
+  opacity: 0.8;
+}

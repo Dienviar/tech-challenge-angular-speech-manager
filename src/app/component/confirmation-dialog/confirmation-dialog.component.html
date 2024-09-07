@@ -1,16 +1,16 @@
 @if (isDialogActive()) {
-  <div class="modal-container">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 class="modal-title">{{ _confirmationService.dialogTitle$ | async }}</h2>
-        <button (click)="cancel()" type="button" class="btn btn-close">×</button>
+  <div class="dialog">
+    <div class="dialog__box">
+      <div class="dialog__header">
+        <h2 class="dialog__title">{{ _confirmationService.dialogTitle$ | async }}</h2>
+        <button (click)="cancel()" type="button" class="dialog__close-button">×</button>
       </div>
-      <div class="modal-content">
+      <div class="dialog__content">
         <p>{{ _confirmationService.dialogContent$ | async }}</p>
       </div>
-      <div class="modal-footer">
-        <button (click)="accept()" type="button" class="btn btn-success">Proceed</button>
-        <button (click)="cancel()" type="button" class="btn btn-secondary">Cancel</button>
+      <div class="dialog__footer">
+        <button (click)="accept()" type="button" class="dialog__button dialog__button--success">Proceed</button>
+        <button (click)="cancel()" type="button" class="dialog__button dialog__button--secondary">Cancel</button>
       </div>
     </div>
   </div>

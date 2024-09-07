@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { Speech } from '../../core/speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { SpeechService } from '../../core/service/speech.service';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { WindowResizeService } from '../../core/service/window-resize.service';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-speeches',
   standalone: true,
-  imports: [CommonModule, UpsertSpeechComponent, NgbAlertModule],
+  imports: [CommonModule, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
   templateUrl: './speeches.component.html',
   styleUrl: './speeches.component.css'
 })
@@ -19,10 +20,13 @@ export class SpeechesComponent implements OnInit {
     private _windowResizeService: WindowResizeService
   ) {}
 
+  @ViewChild(ModalComponent) modalComponent!: ModalComponent;
+
   selectedSpeechId = signal<number>(-1);
 
   currentPage = signal<number>(1);
   pageSize = 5;
+  windowBreakPoint = 900;
   windowWidth = signal<number>(0);
 
   get totalPages(): number {
@@ -38,7 +42,6 @@ export class SpeechesComponent implements OnInit {
   ngOnInit() {
     this._windowResizeService.resize$.subscribe((width) => {
       this.windowWidth.set(Math.trunc(width));
-      console.log(this.windowWidth());
     });
   }
 
@@ -48,5 +51,6 @@ export class SpeechesComponent implements OnInit {
 
   onCardClick(id: number) {
     this.selectedSpeechId.set(id);
+    if (this.windowWidth() < this.windowBreakPoint) this.modalComponent.openModal();
   }
 }

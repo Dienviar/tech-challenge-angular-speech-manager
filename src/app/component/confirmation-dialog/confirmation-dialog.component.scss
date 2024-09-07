@@ -1,4 +1,4 @@
-.modal-container {
+.dialog {
   position: fixed;
   left: 0;
   top: 0;
@@ -12,7 +12,7 @@
   backdrop-filter: blur(2px);
 }
 
-.modal-box {
+.dialog__box {
   width: 400px;
   background-color: var(--page-bg-color);
   border-radius: 15px;
@@ -21,7 +21,7 @@
   flex-direction: column;
 }
 
-.modal-header {
+.dialog__header {
   padding: 15px;
   border-bottom: 1px solid #ddd;
   display: flex;
@@ -29,23 +29,23 @@
   align-items: center;
 }
 
-.modal-title {
+.dialog__title {
   margin: 0;
   font-size: 18px;
 }
 
-.btn-close {
+.dialog__close-button {
   background: none;
   border: none;
   font-size: 18px;
   cursor: pointer;
 }
 
-.modal-content {
+.dialog__content {
   padding: 15px;
 }
 
-.modal-footer {
+.dialog__footer {
   padding: 15px;
   border-top: 1px solid #ddd;
   display: flex;
@@ -53,19 +53,19 @@
   gap: 10px;
 }
 
-.btn {
+.dialog__button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.btn-success {
+.dialog__button--success {
   background-color: #28a745;
   color: white;
 }
 
-.btn-secondary {
+.dialog__button--secondary {
   background-color: #6c757d;
   color: white;
 }

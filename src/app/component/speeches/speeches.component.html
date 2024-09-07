@@ -1,5 +1,5 @@
 <div class="row">
-  <div [ngClass]="{ 'col-4': windowWidth() > 800, 'col-12': windowWidth() < 800 }" class="d-flex flex-column gap-3">
+  <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
     @for (item of pagedData; track item) {
       <div
         (keydown.enter)="onCardClick(item.id)"
@@ -22,7 +22,7 @@
     }
 
     @if (pagedData.length > 0) {
-      <div class="d-flex justify-content-center mt-1">
+      <div class="d-flex justify-content-end mt-1">
         <nav aria-label="Page navigation">
           <ul class="pagination">
             <li class="page-item" [class.disabled]="currentPage() === 1">
@@ -50,9 +50,13 @@
     }
   </div>
   <div class="col-8">
-    @if (windowWidth() > 800) {
+    @if (windowWidth() > windowBreakPoint) {
       <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-    } @else {}
+    } @else {
+      <app-modal>
+        <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+      </app-modal>
+    }
   </div>
 </div>
 
@@ -67,4 +71,3 @@
     </div>
   }
 </ng-template>
-<!-- [ngClass]="{ 'col-8': windowWidth() > 800, 'col-12': windowWidth() < 800 }" -->

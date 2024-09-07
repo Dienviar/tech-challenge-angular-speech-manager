@@ -45,9 +45,9 @@ export class SpeechService {
     if (speechIndex !== -1) {
       const updatedSpeech = { ...this.speechData[speechIndex], ...speech };
       this.speechData = [...this.speechData.slice(0, speechIndex), updatedSpeech, ...this.speechData.slice(speechIndex + 1)];
-      return { code: 200, message: 'Speech updated', label: 'speech_updated' };
+      return { code: 200, message: 'Speech has been updated', label: 'success' };
     } else {
-      return { code: 404, message: 'Speech not found', label: 'speech_not_found' };
+      return { code: 404, message: 'Speech not found', label: 'danger' };
     }
   }
 }

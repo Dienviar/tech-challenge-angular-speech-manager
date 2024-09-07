@@ -40,10 +40,10 @@ export class UpsertSpeechComponent implements OnChanges {
   }
 
   onFormSubmit() {
-    this._confirmationService.openDialog();
+    this._confirmationService.openDialog('Confirmation', 'Are you sure you want to update this speech?');
     this.subscription.add(
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
-        this._speechService.updateSpeech(this.speechForm.value as Speech);
+        this._confirmationService.dialogResult(this._speechService.updateSpeech(this.speechForm.value as Speech));
       })
     );
   }

@@ -12,5 +12,7 @@ export interface Speech {
 export interface Response {
   code: number;
   message: string;
-  label: string;
+  label: AlertType;
 }
+
+export type AlertType = 'success' | 'info' | 'warning' | 'danger';

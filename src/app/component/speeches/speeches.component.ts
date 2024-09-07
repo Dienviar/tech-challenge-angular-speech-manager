@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Speech } from '../../core/speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { SpeechService } from '../../core/service/speech.service';
@@ -9,8 +9,7 @@ import { SpeechService } from '../../core/service/speech.service';
   standalone: true,
   imports: [CommonModule, UpsertSpeechComponent],
   templateUrl: './speeches.component.html',
-  styleUrl: './speeches.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './speeches.component.css'
 })
 export class SpeechesComponent implements OnInit {
   constructor(private _speechService: SpeechService) {}

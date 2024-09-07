@@ -1,29 +1,30 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { ConfirmationService } from '../../core/service/confirmation.service';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-confirmation-dialog',
   standalone: true,
-  imports: [NgbAlertModule],
+  imports: [NgbAlertModule, CommonModule],
   templateUrl: './confirmation-dialog.component.html',
   styleUrl: './confirmation-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmationDialogComponent implements OnInit {
-  constructor(public confirmationService: ConfirmationService) {}
+  constructor(public _confirmationService: ConfirmationService) {}
 
   isDialogActive = signal(false);
   isAlertActive = signal(false);
 
   ngOnInit(): void {
-    this.confirmationService.dialogState$.subscribe((state: boolean) => {
+    this._confirmationService.dialogState$.subscribe((state: boolean) => {
       this.isDialogActive.set(state);
     });
   }
 
   accept() {
-    this.confirmationService.acceptDialog();
+    this._confirmationService.acceptDialog();
 
     this.isAlertActive.set(true);
 
@@ -32,7 +33,7 @@ export class ConfirmationDialogComponent implements OnInit {
     }, 3000);
   }
 
-  close() {
-    this.confirmationService.closeDialog();
+  cancel() {
+    this._confirmationService.closeDialog();
   }
 }

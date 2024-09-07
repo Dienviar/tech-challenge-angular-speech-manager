@@ -1,12 +1,21 @@
 @if (isDialogActive()) {
-  <div class="container">
-    <div class="box">
-      <button (click)="accept()" type="button" class="btn btn-success">Success</button>
-      <button (click)="close()" type="button" class="btn btn-success">Close</button>
+  <div class="modal-container">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title">{{ _confirmationService.dialogTitle$ | async }}</h2>
+        <button (click)="cancel()" type="button" class="btn btn-close">×</button>
+      </div>
+      <div class="modal-content">
+        <p>{{ _confirmationService.dialogContent$ | async }}</p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="accept()" type="button" class="btn btn-success">Proceed</button>
+        <button (click)="cancel()" type="button" class="btn btn-secondary">Cancel</button>
+      </div>
     </div>
   </div>
 }
 
 @if (isAlertActive()) {
-  <ngb-alert type="success"> This alert's type is success and it's not dismissible because the config has been customized </ngb-alert>
+  <ngb-alert [type]="(_confirmationService.dialogResult$ | async)?.label ?? 'secondary'">{{ (_confirmationService.dialogResult$ | async)?.message }}</ngb-alert>
 }

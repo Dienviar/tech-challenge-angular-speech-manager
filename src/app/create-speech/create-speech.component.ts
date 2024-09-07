@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './create-speech.component.html',
-  styleUrl: './create-speech.component.css'
+  styleUrl: './create-speech.component.css',
 })
-export class CreateSpeechComponent {
-
-}
+export class CreateSpeechComponent {}

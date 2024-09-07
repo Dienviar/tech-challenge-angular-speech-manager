@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterModule,
-  RouterOutlet,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 
@@ -15,7 +9,7 @@ import { filter } from 'rxjs';
   standalone: true,
   imports: [RouterOutlet, NgbModule, RouterModule, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   constructor(private _router: Router) {}
@@ -24,11 +18,9 @@ export class AppComponent implements OnInit {
   currentUrl = signal<string | undefined>(undefined);
 
   ngOnInit() {
-    this._router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentUrl.set(event.url);
-      });
+    this._router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.currentUrl.set(event.url);
+    });
   }
 
   openNav() {

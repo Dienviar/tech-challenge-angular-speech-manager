@@ -1,43 +1,46 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { SpeechService } from '../speech.service';
+import { Speech } from '../speech.model';
 
 @Component({
   selector: 'app-speeches',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './speeches.component.html',
-  styleUrl: './speeches.component.css',
+  styleUrl: './speeches.component.css'
 })
-export class SpeechesComponent {
+export class SpeechesComponent implements OnInit {
   constructor(private _speechService: SpeechService) {}
 
-  selectedSpeech = signal<any>(true);
+  selectedSpeech = signal<number | undefined>(undefined);
 
   currentPage = signal<number>(1);
-  pageSize: number = 5;
+  pageSize = 5;
 
   get totalPages(): number {
-    return Math.ceil(
-      this._speechService.getAllSpeechesData.length / this.pageSize
-    );
+    return Math.ceil(this._speechService.getAllSpeechesData.length / this.pageSize);
   }
 
-  get pagedData(): any[] {
+  get pagedData(): Speech[] {
     const start = (this.currentPage() - 1) * this.pageSize;
     const end = start + this.pageSize;
     return this._speechService.getAllSpeechesData.slice(start, end);
+  }
+
+  ngOnInit() {
+    console.log(this._speechService.getAllSpeechesData);
   }
 
   onPageChange(page: number) {
     this.currentPage.set(page);
   }
 
-  onCardClick(name: number) {
-    this.selectedSpeech.set(name);
+  onCardClick(id: number) {
+    this.selectedSpeech.set(id);
   }
 
-  trackByName(index: number, item: any) {
+  trackByName(index: number, item: Speech) {
     return item.name;
   }
 }

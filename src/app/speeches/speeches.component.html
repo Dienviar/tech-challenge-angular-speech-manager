@@ -26,13 +26,13 @@
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li
-            class="page-item"
-            *ngFor="let page of [].constructor(totalPages); let i = index"
-            [ngClass]="{ active: currentPage() === i + 1 }"
-          >
+
+          @for(item of [].constructor(totalPages); track item; let i = $index){
+          <li class="page-item" [ngClass]="{ active: currentPage() === i + 1 }">
             <a class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }}</a>
           </li>
+          }
+
           <li class="page-item" [class.disabled]="currentPage() === totalPages">
             <a
               class="page-link"

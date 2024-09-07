@@ -71,11 +71,11 @@ export class SpeechesComponent {
     this.currentPage.set(page);
   }
 
-  trackByName(index: number, item: any) {
-    return item.name;
-  }
-
   onCardClick(name: number) {
     this.selectedSpeech.set(name);
+  }
+
+  trackByName(index: number, item: any) {
+    return item.name;
   }
 }

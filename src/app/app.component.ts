@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  toggleNavbar() {
+  openNav() {
     this.isCollapsed.update((c) => !c);
   }
 }

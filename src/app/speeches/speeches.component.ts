@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Signal, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { SpeechService } from '../speech.service';
 
 @Component({
   selector: 'app-speeches',
@@ -9,62 +10,23 @@ import { Component, Signal, signal } from '@angular/core';
   styleUrl: './speeches.component.css',
 })
 export class SpeechesComponent {
-  selectedSpeech = signal<any>(true);
-  sampleData = [
-    {
-      id: 1,
-      name: 'Speech 1',
-    },
-    {
-      id: 2,
-      name: 'Speech 1',
-    },
-    {
-      id: 3,
-      name: 'Speech 1',
-    },
-    {
-      id: 4,
-      name: 'Speech 1',
-    },
-    {
-      id: 5,
-      name: 'Speech 1',
-    },
-    {
-      id: 6,
-      name: 'Speech 1',
-    },
-    {
-      id: 7,
-      name: 'Speech 1',
-    },
+  constructor(private _speechService: SpeechService) {}
 
-    {
-      id: 8,
-      name: 'Speech 1',
-    },
-    {
-      id: 9,
-      name: 'Speech 1',
-    },
-    {
-      id: 10,
-      name: 'Speech 1',
-    },
-  ];
+  selectedSpeech = signal<any>(true);
 
   currentPage = signal<number>(1);
   pageSize: number = 5;
 
   get totalPages(): number {
-    return Math.ceil(this.sampleData.length / this.pageSize);
+    return Math.ceil(
+      this._speechService.getAllSpeechesData.length / this.pageSize
+    );
   }
 
   get pagedData(): any[] {
     const start = (this.currentPage() - 1) * this.pageSize;
     const end = start + this.pageSize;
-    return this.sampleData.slice(start, end);
+    return this._speechService.getAllSpeechesData.slice(start, end);
   }
 
   onPageChange(page: number) {

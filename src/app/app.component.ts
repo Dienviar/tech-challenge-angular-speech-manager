@@ -18,10 +18,10 @@ import { filter } from 'rxjs';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
+  constructor(private _router: Router) {}
+
   isCollapsed = signal<boolean>(true);
   currentUrl = signal<string | undefined>(undefined);
-
-  constructor(private _router: Router) {}
 
   ngOnInit() {
     this._router.events

@@ -8,7 +8,15 @@ export class SpeechService {
   private speechData: Speech[] = [
     {
       id: 0,
-      name: '',
+      name: 'Speech 1',
+      date_created: '',
+      date_updated: '',
+      is_deleted: false,
+      is_archived: false
+    },
+    {
+      id: 1,
+      name: 'Speech 2',
       date_created: '',
       date_updated: '',
       is_deleted: false,

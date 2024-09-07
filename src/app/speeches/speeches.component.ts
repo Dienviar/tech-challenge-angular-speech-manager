@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { SpeechService } from '../speech.service';
 import { Speech } from '../speech.model';
 
@@ -8,7 +8,8 @@ import { Speech } from '../speech.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './speeches.component.html',
-  styleUrl: './speeches.component.css'
+  styleUrl: './speeches.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpeechesComponent implements OnInit {
   constructor(private _speechService: SpeechService) {}

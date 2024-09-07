@@ -1,2 +1,58 @@
-<p>speeches works!</p>
-asda
+<div class="row">
+  <div class="col-3 d-flex flex-column gap-3">
+    <ng-container *ngFor="let item of pagedData; trackBy: trackByName">
+      <div
+        class="card"
+        [class.selected]="selectedSpeech() === item.id"
+        (click)="onCardClick(item.id)"
+        [ngClass]="{ selected: selectedSpeech() === item.id }"
+      >
+        <div class="card-body">
+          {{ item.id }}
+        </div>
+      </div>
+    </ng-container>
+
+    @if(pagedData.length > 0){
+    <div class="d-flex justify-content-center mt-1">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" [ngClass]="{ disabled: currentPage() === 1 }">
+            <a
+              class="page-link"
+              (click)="onPageChange(currentPage() - 1)"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            [ngClass]="{ active: currentPage() === i + 1 }"
+          >
+            <a class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }}</a>
+          </li>
+          <li
+            class="page-item"
+            [ngClass]="{ disabled: currentPage() === totalPages }"
+          >
+            <a
+              class="page-link"
+              (click)="onPageChange(currentPage() + 1)"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    }@else {
+    <div class="text-center">There are no items.</div>
+    }
+  </div>
+  <div class="col-9 h-500 bg-blue">
+    <!-- Content for the right side -->
+  </div>
+</div>

@@ -1,4 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --active-link-color: #557c56;
+  --hover-link-color: #6a9c89;
+  --selected-speech-color: #e9efec;
+  --disabled-color: #b4b4b8;
+}
+
 body {
   padding: 20px;
+  background-color: #f5f7f8;
 }

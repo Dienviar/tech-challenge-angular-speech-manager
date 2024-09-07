@@ -1,0 +1,42 @@
+.card {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card.selected {
+  background-color: var(--selected-speech-color);
+  cursor: default;
+}
+
+.pagination .page-item.disabled .page-link {
+  pointer-events: none;
+}
+
+.pagination .page-item.active .page-link {
+  font-weight: bold;
+}
+
+.pagination .page-link {
+  color: var(--active-link-color);
+  background-color: white;
+  user-select: none;
+  cursor: pointer;
+}
+
+.pagination .page-item.active .page-link {
+  color: white;
+  background-color: var(--active-link-color);
+  border: none;
+  cursor: default;
+}
+
+.pagination .page-link:hover {
+  color: white;
+  background-color: var(--hover-link-color);
+}
+
+.pagination .page-item.disabled .page-link {
+  color: white;
+  background-color: var(--disabled-color);
+  border: none;
+}

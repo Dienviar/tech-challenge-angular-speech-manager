@@ -1,0 +1,12 @@
+@if (isDialogActive()) {
+  <div class="container">
+    <div class="box">
+      <button (click)="accept()" type="button" class="btn btn-success">Success</button>
+      <button (click)="close()" type="button" class="btn btn-success">Close</button>
+    </div>
+  </div>
+}
+
+@if (isAlertActive()) {
+  <ngb-alert type="success"> This alert's type is success and it's not dismissible because the config has been customized </ngb-alert>
+}

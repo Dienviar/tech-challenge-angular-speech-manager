@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, Speech } from './speech.model';
+import { Response, Speech } from '../speech.model';
 
 @Injectable({
   providedIn: 'root'

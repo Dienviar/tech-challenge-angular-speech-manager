@@ -3,11 +3,12 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
+import { ConfirmationDialogComponent } from './component/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgbModule, RouterModule, CommonModule],
+  imports: [RouterOutlet, NgbModule, RouterModule, CommonModule, ConfirmationDialogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,0 +1,17 @@
+.nav-link.active {
+  font-weight: bold;
+  color: #557c56;
+  cursor: default;
+}
+
+.disabled-link {
+  cursor: default;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #6a9c89;
+}

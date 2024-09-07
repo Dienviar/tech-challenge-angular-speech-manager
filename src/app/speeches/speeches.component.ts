@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { SpeechService } from '../speech.service';
 import { Speech } from '../speech.model';
+import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 
 @Component({
   selector: 'app-speeches',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UpsertSpeechComponent],
   templateUrl: './speeches.component.html',
   styleUrl: './speeches.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -14,7 +15,7 @@ import { Speech } from '../speech.model';
 export class SpeechesComponent implements OnInit {
   constructor(private _speechService: SpeechService) {}
 
-  selectedSpeech = signal<number | undefined>(undefined);
+  selectedSpeechId = signal<number>(-1);
 
   currentPage = signal<number>(1);
   pageSize = 5;
@@ -38,10 +39,6 @@ export class SpeechesComponent implements OnInit {
   }
 
   onCardClick(id: number) {
-    this.selectedSpeech.set(id);
-  }
-
-  trackByName(index: number, item: Speech) {
-    return item.name;
+    this.selectedSpeechId.set(id);
   }
 }

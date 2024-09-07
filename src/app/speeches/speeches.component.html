@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-3 d-flex flex-column gap-3">
-    <ng-container *ngFor="let item of pagedData; trackBy: trackByName">
-      <button class="card" [class.selected]="selectedSpeech() === item.id" (click)="onCardClick(item.id)" [ngClass]="{ selected: selectedSpeech() === item.id }">
+    @for (item of pagedData; track item) {
+      <button class="card" [class.selected]="selectedSpeechId() === item.id" (click)="onCardClick(item.id)">
         <div class="card-body">
           {{ item.id }}
         </div>
       </button>
-    </ng-container>
+    }
 
     @if (pagedData.length > 0) {
       <div class="d-flex justify-content-center mt-1">
@@ -37,6 +37,8 @@
     }
   </div>
   <div class="col-9 h-500 bg-blue">
-    <!-- Content for the right side -->
+    @defer (when selectedSpeechId() !== -1) {
+      <app-upsert-speech [speechId]="selectedSpeechId()" />
+    }
   </div>
 </div>

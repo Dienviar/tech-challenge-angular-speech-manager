@@ -5,6 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './search-speech.component.html',
-  styleUrl: './search-speech.component.css',
+  styleUrl: './search-speech.component.css'
 })
 export class SearchSpeechComponent {}

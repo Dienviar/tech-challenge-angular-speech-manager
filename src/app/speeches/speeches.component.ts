@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { SpeechService } from '../speech.service';
-import { Speech } from '../speech.model';
+import { Speech } from '../core/speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
+import { SpeechService } from '../core/speech.service';
 
 @Component({
   selector: 'app-speeches',

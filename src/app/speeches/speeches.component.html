@@ -1,11 +1,24 @@
 <div class="row">
-  <div class="col-3 d-flex flex-column gap-3">
+  <div class="col-4 d-flex flex-column gap-3">
     @for (item of pagedData; track item) {
-      <button class="card" [class.selected]="selectedSpeechId() === item.id" (click)="onCardClick(item.id)">
+      <div
+        (keydown.enter)="onCardClick(item.id)"
+        (keydown.space)="onCardClick(item.id)"
+        tabindex="0"
+        role="button"
+        class="card"
+        [class.selected]="selectedSpeechId() === item.id"
+        (click)="onCardClick(item.id)"
+      >
         <div class="card-body">
-          {{ item.id }}
+          <h5 class="card-title">{{ item.subject }}</h5>
+          <p class="card-text">Author: {{ item.author }}</p>
+          <div class="date-container">
+            <span class="card-text">Date Created: {{ item.date_created | date: 'MMMM d, y, h:mm a' }}</span>
+            <span class="card-text">Date Updated: {{ item.date_updated | date: 'MMMM d, y, h:mm a' }}</span>
+          </div>
         </div>
-      </button>
+      </div>
     }
 
     @if (pagedData.length > 0) {
@@ -36,9 +49,11 @@
       <div class="text-center">There are no items.</div>
     }
   </div>
-  <div class="col-9 h-500 bg-blue">
+  <div class="col-8 h-500 bg-blue">
     @defer (when selectedSpeechId() !== -1) {
       <app-upsert-speech [speechId]="selectedSpeechId()" />
+    } @placeholder {
+      <p>No Selected Speech</p>
     }
   </div>
 </div>

@@ -3,6 +3,15 @@
   transition: background-color 0.3s ease;
 }
 
+.card-body .card-text {
+  font-size: 12px;
+}
+
+.date-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .selected {
   background-color: var(--selected-speech-color);
   cursor: default;

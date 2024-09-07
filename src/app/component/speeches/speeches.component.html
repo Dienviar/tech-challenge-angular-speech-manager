@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-4 d-flex flex-column gap-3">
+  <div [ngClass]="{ 'col-4': windowWidth() > 800, 'col-12': windowWidth() < 800 }" class="d-flex flex-column gap-3">
     @for (item of pagedData; track item) {
       <div
         (keydown.enter)="onCardClick(item.id)"
@@ -49,11 +49,22 @@
       <div class="text-center">There are no items.</div>
     }
   </div>
-  <div class="col-8 h-500 bg-blue">
-    @defer (when selectedSpeechId() !== -1) {
-      <app-upsert-speech [speechId]="selectedSpeechId()" />
-    } @placeholder {
-      <p>No Selected Speech</p>
-    }
+  <div class="col-8">
+    @if (windowWidth() > 800) {
+      <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+    } @else {}
   </div>
 </div>
+
+<ng-template #speechForm>
+  @defer (when selectedSpeechId() !== -1) {
+    <app-upsert-speech [speechId]="selectedSpeechId()" />
+  } @placeholder {
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">no selected speech</h5>
+      </div>
+    </div>
+  }
+</ng-template>
+<!-- [ngClass]="{ 'col-8': windowWidth() > 800, 'col-12': windowWidth() < 800 }" -->

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ModalService } from '../../core/service/modal.service';
+import { ModalService } from './modal.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

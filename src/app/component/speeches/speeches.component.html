@@ -1,27 +1,31 @@
-<div class="row">
-  <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
-    @for (item of pagedData; track item) {
-      <div
-        (keydown.enter)="onCardClick(item.id)"
-        (keydown.space)="onCardClick(item.id)"
-        tabindex="0"
-        role="button"
-        class="card"
-        [class.selected]="selectedSpeechId() === item.id"
-        (click)="onCardClick(item.id)"
-      >
-        <div class="card-body">
-          <h5 class="card-title">{{ item.subject }}</h5>
-          <p class="card-text">Author: {{ item.author }}</p>
-          <div class="date-container">
-            <span class="card-text">Date Created: {{ item.date_created | date: 'MMMM d, y, h:mm a' }}</span>
-            <span class="card-text">Date Updated: {{ item.date_updated | date: 'MMMM d, y, h:mm a' }}</span>
+@if (totalPages > 0) {
+  <div class="row">
+    <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
+      @for (item of pagedData; track item) {
+        <div
+          (keydown.enter)="onCardClick(item.id)"
+          (keydown.space)="onCardClick(item.id)"
+          tabindex="0"
+          role="button"
+          class="card"
+          [class.selected]="selectedSpeechId() === item.id"
+          (click)="onCardClick(item.id)"
+        >
+          <div class="card-body">
+            <h5 class="card-title">{{ item.subject }}</h5>
+            <div class="date-container">
+              <span class="card-text">Speech Date: {{ item.speech_date | date: 'MMMM d, y, h:mm a' }}</span>
+              <span class="card-text">Author: {{ item.author }}</span>
+            </div>
+
+            <div class="date-container mt-2">
+              <span class="card-text">Date Created: {{ item.date_created | date: 'MMMM d, y, h:mm a' }}</span>
+              <span class="card-text">Date Updated: {{ (item.date_updated | date: 'MMMM d, y, h:mm a') ?? 'N/A' }}</span>
+            </div>
           </div>
         </div>
-      </div>
-    }
+      }
 
-    @if (pagedData.length > 0) {
       <div class="d-flex justify-content-end mt-1">
         <nav aria-label="Page navigation">
           <ul class="pagination">
@@ -45,28 +49,33 @@
           </ul>
         </nav>
       </div>
-    } @else {
-      <div class="text-center">There are no items.</div>
-    }
-  </div>
-  <div class="col-8">
-    @if (windowWidth() > windowBreakPoint) {
-      <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-    } @else {
-      <app-modal>
+    </div>
+    <div class="col-8">
+      @if (windowWidth() > windowBreakPoint) {
         <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-      </app-modal>
-    }
+      } @else {
+        <app-modal>
+          <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+        </app-modal>
+      }
+    </div>
   </div>
-</div>
+} @else {
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">No speech record has been found in the system</h5>
+      <button type="button" class="btn btn-success">Create Speech</button>
+    </div>
+  </div>
+}
 
 <ng-template #speechForm>
-  @defer (when selectedSpeechId() !== -1) {
-    <app-upsert-speech [speechId]="selectedSpeechId()" />
-  } @placeholder {
+  @if (selectedSpeechId() !== -1) {
+    <app-upsert-speech [speechId]="selectedSpeechId()" (speechDeleted)="onSpeechDeleted()" />
+  } @else {
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">no selected speech</h5>
+        <h5 class="card-title">There is no selected speech to view</h5>
       </div>
     </div>
   }

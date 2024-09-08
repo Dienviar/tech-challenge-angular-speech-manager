@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, input, OnChanges, SimpleChanges } from '@angular/core';
-import { SpeechService } from '../../core/service/speech.service';
+import { ChangeDetectionStrategy, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormGroupType } from '../../core/utils';
-import { Speech } from '../../core/speech.model';
+import { Speech } from '../speech.model';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmationService } from '../../core/service/confirmation.service';
-import { Subscription, take } from 'rxjs';
+import { take } from 'rxjs';
+import { Router } from '@angular/router';
+import { ConfirmationService } from '../../shared/confirmation-dialog/confirmation.service';
+import { SpeechService } from '../speech.service';
 @Component({
   selector: 'app-upsert-speech',
   standalone: true,
@@ -14,19 +15,23 @@ import { Subscription, take } from 'rxjs';
   styleUrl: './upsert-speech.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UpsertSpeechComponent implements OnChanges {
+export class UpsertSpeechComponent implements OnInit, OnChanges {
   constructor(
     private _speechService: SpeechService,
-    private _confirmationService: ConfirmationService
+    private _confirmationService: ConfirmationService,
+    private _router: Router
   ) {}
 
-  private subscription = new Subscription();
+  speechId = input<number>();
+  fetchSpeech = signal<Speech | undefined>(undefined);
+  speechDeleted = output<boolean>();
 
-  speechId = input.required<number>();
+  currentDate?: string;
 
   speechForm = new FormGroup<FormGroupType<Speech>>({
     id: new FormControl(undefined),
     subject: new FormControl(undefined, Validators.required),
+    speech_date: new FormControl(undefined, Validators.required),
     author: new FormControl(undefined, Validators.required),
     content: new FormControl(undefined, Validators.required),
     date_created: new FormControl(undefined),
@@ -35,16 +40,71 @@ export class UpsertSpeechComponent implements OnChanges {
     is_archived: new FormControl(undefined)
   });
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.speechForm.patchValue(this._speechService.getAllSpeechById(changes['speechId'].currentValue));
+  ngOnInit() {
+    this.currentDate = new Date().toISOString().substring(0, 10);
   }
 
-  onFormSubmit() {
-    this._confirmationService.openDialog('Confirmation', 'Are you sure you want to update this speech?');
-    this.subscription.add(
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['speechId'].currentValue !== -1) this.setFormValue(this._speechService.getAllSpeechById(changes['speechId'].currentValue));
+    this.disableForm();
+  }
+
+  formSubmit() {
+    this._confirmationService.openDialog('Confirmation', `Are you sure you want to ${this.speechId() ? 'update' : 'create'} this speech?`);
+
+    if (this.speechId()) {
+      this.speechForm.patchValue({
+        date_updated: new Date()
+      });
+
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
         this._confirmationService.dialogResult(this._speechService.updateSpeech(this.speechForm.value as Speech));
-      })
-    );
+        this.disableForm();
+      });
+    } else {
+      this.speechForm.patchValue({
+        id: this._speechService.getAllSpeechesData.length + 1,
+        date_created: new Date(),
+        date_updated: undefined,
+        is_deleted: false,
+        is_archived: false
+      });
+
+      this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
+        this._confirmationService.dialogResult(this._speechService.createSpeech(this.speechForm.value as Speech));
+        this._router.navigateByUrl('/');
+      });
+    }
+  }
+
+  deleteSpeech() {
+    this._confirmationService.openDialog('Confirmation', `Are you sure you want to delete this speech?`);
+    this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
+      this._confirmationService.dialogResult(this._speechService.deleteSpeech(this.speechId() as number));
+
+      this.speechDeleted.emit(true);
+    });
+  }
+
+  enableForm() {
+    this.speechForm.enable();
+  }
+
+  disableForm() {
+    this.speechForm.disable();
+  }
+
+  setFormValue(speech: Speech) {
+    this.speechForm.patchValue({
+      ...speech,
+      speech_date: new Date(speech.speech_date).toISOString().substring(0, 10)
+    });
+
+    if (this.speechId()) this.fetchSpeech.set(speech);
+  }
+
+  revertFormValue() {
+    this.setFormValue(this.fetchSpeech() as Speech);
+    this.disableForm();
   }
 }

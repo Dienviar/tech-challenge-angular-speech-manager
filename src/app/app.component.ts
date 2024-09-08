@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
-import { ConfirmationDialogComponent } from './component/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +26,6 @@ export class AppComponent implements OnInit {
   }
 
   openNav() {
-    this.isCollapsed.update((c) => !c);
+    this.isCollapsed.set(!this.isCollapsed());
   }
 }

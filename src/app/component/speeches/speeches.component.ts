@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
-import { Speech } from '../../core/speech.model';
+import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
-import { SpeechService } from '../../core/service/speech.service';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { WindowResizeService } from '../../core/service/window-resize.service';
-import { ModalComponent } from '../modal/modal.component';
+import { ModalComponent } from '../../shared/modal/modal.component';
+import { SpeechService } from '../speech.service';
 
 @Component({
   selector: 'app-speeches',
@@ -52,5 +52,10 @@ export class SpeechesComponent implements OnInit {
   onCardClick(id: number) {
     this.selectedSpeechId.set(id);
     if (this.windowWidth() < this.windowBreakPoint) this.modalComponent.openModal();
+  }
+
+  onSpeechDeleted() {
+    this.modalComponent.closeModal();
+    this.selectedSpeechId.set(-1);
   }
 }

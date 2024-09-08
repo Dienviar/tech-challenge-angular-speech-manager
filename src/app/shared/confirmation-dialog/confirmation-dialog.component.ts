@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { ConfirmationService } from '../../core/service/confirmation.service';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
+import { ConfirmationService } from './confirmation.service';
 
 @Component({
   selector: 'app-confirmation-dialog',
@@ -29,7 +29,7 @@ export class ConfirmationDialogComponent implements OnInit {
     this.isAlertActive.set(true);
 
     setTimeout(() => {
-      this.isAlertActive.update(() => false);
+      this.isAlertActive.set(false);
     }, 3000);
   }
 

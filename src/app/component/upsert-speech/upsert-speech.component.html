@@ -1,32 +1,46 @@
 <div class="card">
   <div class="card-body">
     <div class="d-flex flex-column gap-3">
-      <form [formGroup]="speechForm" class="d-flex flex-column gap-2" (ngSubmit)="onFormSubmit()">
+      <form [formGroup]="speechForm" class="d-flex flex-column gap-2" (ngSubmit)="formSubmit()">
         <div class="row g-2">
           <div class="col">
             <div class="form-group">
-              <label for="author">Author</label>
-              <input type="text" class="form-control" id="author" formControlName="author" required />
+              <label for="subject">Subject</label>
+              <input type="text" class="form-control" id="subject" formControlName="subject" />
             </div>
           </div>
 
           <div class="col">
             <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" class="form-control" id="subject" formControlName="subject" required />
+              <label for="speech_date">Speech Date</label>
+              <input type="date" class="form-control" id="speech_date" [min]="currentDate" formControlName="speech_date" />
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label for="author">Author</label>
+              <input type="text" class="form-control" id="author" formControlName="author" />
             </div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="content">Content</label>
-          <textarea class="form-control" id="content" rows="11" formControlName="content" required></textarea>
+          <textarea class="form-control" id="content" rows="11" formControlName="content"></textarea>
         </div>
 
         <div class="d-flex justify-content-end gap-2 mt-3">
-          <button type="button" class="btn btn-outline-danger">Delete</button>
-          <button type="submit" class="btn btn-success">Save</button>
-          <button type="button" class="btn btn-primary">Share</button>
+          @if (!speechId()) {
+            <button type="submit" class="btn btn-success">Create</button>
+          } @else if (speechForm.enabled) {
+            <button (click)="deleteSpeech()" type="button" class="btn btn-danger">Delete</button>
+            <button (click)="revertFormValue()" type="button" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-success">Save</button>
+          } @else {
+            <button (click)="enableForm()" type="button" class="btn btn-secondary">Edit</button>
+            <button type="button" class="btn btn-primary">Share</button>
+          }
         </div>
       </form>
     </div>

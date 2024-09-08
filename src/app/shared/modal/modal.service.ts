@@ -8,6 +8,10 @@ export class ModalService {
   private modalStateSubject = new BehaviorSubject<boolean>(false);
   modalState$: Observable<boolean> = this.modalStateSubject.asObservable();
 
+  get modalState(): boolean {
+    return this.modalStateSubject.getValue();
+  }
+
   openModal(): void {
     this.modalStateSubject.next(true);
   }

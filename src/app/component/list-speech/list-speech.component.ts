@@ -1,26 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { WindowResizeService } from '../../core/service/window-resize.service';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
   imports: [CommonModule, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
   templateUrl: './list-speech.component.html',
-  styleUrl: './list-speech.component.css'
+  styleUrl: './list-speech.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListSpeechComponent implements OnInit {
   constructor(
     private _speechService: SpeechService,
-    private _windowResizeService: WindowResizeService
+    private _windowResizeService: WindowResizeService,
+    private _modalService: ModalService
   ) {}
-
-  @ViewChild(ModalComponent) modalComponent!: ModalComponent;
 
   selectedSpeechId = signal<number>(-1);
 
@@ -42,6 +43,14 @@ export class ListSpeechComponent implements OnInit {
   ngOnInit() {
     this._windowResizeService.resize$.subscribe((width) => {
       this.windowWidth.set(Math.trunc(width));
+
+      if (this.selectedSpeechId() !== -1) {
+        if (width < this.windowBreakPoint) {
+          this.openModal();
+        } else if (width > this.windowBreakPoint && this._modalService.modalState) {
+          this.closeModal();
+        }
+      }
     });
   }
 
@@ -51,11 +60,23 @@ export class ListSpeechComponent implements OnInit {
 
   onCardClick(id: number) {
     this.selectedSpeechId.set(id);
-    if (this.windowWidth() < this.windowBreakPoint) this.modalComponent.openModal();
+    if (this.windowWidth() < this.windowBreakPoint) this.openModal();
   }
 
   onSpeechDeleted() {
-    this.modalComponent.closeModal();
+    this.clearSelectedSpeechId();
+    if (this.windowWidth() < this.windowBreakPoint) this.closeModal();
+  }
+
+  openModal() {
+    this._modalService.openModal();
+  }
+
+  closeModal() {
+    this._modalService.closeModal();
+  }
+
+  clearSelectedSpeechId() {
     this.selectedSpeechId.set(-1);
   }
 }

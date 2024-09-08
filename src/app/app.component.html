@@ -2,7 +2,7 @@
 
 <div class="d-flex flex-column gap-3">
   <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid bg-white">
+    <div class="container-fluid">
       <p class="navbar-brand">Speech App</p>
 
       <button class="navbar-toggler" type="button" (click)="openNav()">
@@ -22,39 +22,18 @@
 
       <div [ngbCollapse]="isCollapsed()" class="navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item p-2">
-            <a
-              class="nav-link"
-              routerLink="/"
-              [ngClass]="{
-                active: currentUrl() === '/',
-                'disabled-link': currentUrl() === '/'
-              }"
-              >List of Speech</a
-            >
-          </li>
-          <li class="nav-item p-2">
-            <a
-              class="nav-link"
-              routerLink="/upsert"
-              [ngClass]="{
-                active: currentUrl() === '/upsert',
-                'disabled-link': currentUrl() === '/upsert'
-              }"
-              >Create New Speech</a
-            >
-          </li>
-          <li class="nav-item p-2">
-            <a
-              class="nav-link"
-              routerLink="/search"
-              [ngClass]="{
-                active: currentUrl() === '/search',
-                'disabled-link': currentUrl() === '/search'
-              }"
-              >Search Speech</a
-            >
-          </li>
+          @for (item of navigation; track item.label) {
+            <li class="nav-item p-2">
+              <a
+                class="nav-link"
+                [routerLink]="item.routerLink"
+                [ngClass]="{
+                  active: currentUrl() === item.routerLink
+                }"
+                >{{ item.label }}</a
+              >
+            </li>
+          }
         </ul>
       </div>
     </div>

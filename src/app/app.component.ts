@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/rout
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
+import { NavigationElem } from './core/interface';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,21 @@ export class AppComponent implements OnInit {
 
   isCollapsed = signal<boolean>(true);
   currentUrl = signal<string | undefined>(undefined);
+
+  navigation: NavigationElem[] = [
+    {
+      label: 'List of Speech',
+      routerLink: '/'
+    },
+    {
+      label: 'Create New Speech',
+      routerLink: '/create'
+    },
+    {
+      label: 'Search Speech',
+      routerLink: '/search'
+    }
+  ];
 
   ngOnInit() {
     this._router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {

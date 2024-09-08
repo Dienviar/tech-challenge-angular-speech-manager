@@ -1,7 +1,7 @@
 @if (totalPages > 0) {
   <div class="row">
     <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
-      @for (item of pagedData; track item) {
+      @for (item of pagedData; track item.id) {
         <div
           (keydown.enter)="onCardClick(item.id)"
           (keydown.space)="onCardClick(item.id)"
@@ -14,8 +14,8 @@
           <div class="card-body">
             <h5 class="card-title">{{ item.subject }}</h5>
             <div class="date-container">
-              <span class="card-text">Speech Date: {{ item.speech_date | date: 'MMMM d, y, h:mm a' }}</span>
               <span class="card-text">Author: {{ item.author }}</span>
+              <span class="card-text">Speech Date: {{ item.speech_date | date: 'MMMM d, y, h:mm a' }}</span>
             </div>
 
             <div class="date-container mt-2">
@@ -35,9 +35,9 @@
               </button>
             </li>
 
-            @for (item of [].constructor(totalPages); track item; let i = $index) {
+            @for (item of [].constructor(totalPages); track i; let i = $index) {
               <li class="page-item" [ngClass]="{ active: currentPage() === i + 1 }">
-                <button class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }}</button>
+                <button class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }} {{ item }}</button>
               </li>
             }
 
@@ -53,10 +53,6 @@
     <div class="col-8">
       @if (windowWidth() > windowBreakPoint) {
         <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-      } @else {
-        <app-modal>
-          <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-        </app-modal>
       }
     </div>
   </div>
@@ -80,3 +76,9 @@
     </div>
   }
 </ng-template>
+
+@defer {
+  <app-modal (modalClose)="clearSelectedSpeechId()">
+    <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+  </app-modal>
+}

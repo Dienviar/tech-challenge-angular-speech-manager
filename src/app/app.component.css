@@ -4,10 +4,6 @@
   cursor: default;
 }
 
-.disabled-link {
-  cursor: default;
-}
-
 .nav-link {
   cursor: pointer;
   user-select: none;

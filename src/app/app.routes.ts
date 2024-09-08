@@ -5,6 +5,6 @@ import { ListSpeechComponent } from './component/list-speech/list-speech.compone
 
 export const routes: Routes = [
   { path: '', component: ListSpeechComponent },
-  { path: 'upsert', component: UpsertSpeechComponent },
+  { path: 'create', component: UpsertSpeechComponent },
   { path: 'search', component: SearchSpeechComponent }
 ];

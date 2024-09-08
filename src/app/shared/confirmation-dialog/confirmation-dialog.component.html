@@ -9,8 +9,8 @@
         <p>{{ _confirmationService.dialogContent$ | async }}</p>
       </div>
       <div class="dialog__footer">
-        <button (click)="accept()" type="button" class="dialog__button dialog__button--success">Proceed</button>
         <button (click)="cancel()" type="button" class="dialog__button dialog__button--secondary">Cancel</button>
+        <button (click)="accept()" type="button" class="dialog__button dialog__button--success">Proceed</button>
       </div>
     </div>
   </div>

@@ -5,3 +5,8 @@ export interface ResponseObj {
   message: string;
   label: AlertType;
 }
+
+export interface NavigationElem {
+  label: string;
+  routerLink: string;
+}

@@ -35,8 +35,7 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
     author: new FormControl(undefined),
     date_created: new FormControl(undefined),
     date_updated: new FormControl(undefined),
-    is_deleted: new FormControl(undefined),
-    is_archived: new FormControl(undefined)
+    is_deleted: new FormControl(undefined)
   });
 
   get modalIsActive(): boolean {

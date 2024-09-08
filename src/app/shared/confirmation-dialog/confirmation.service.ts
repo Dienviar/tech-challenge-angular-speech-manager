@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { ResponseObj } from '../../core/interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +17,6 @@ export class ConfirmationService {
   private dialogContentSubject = new BehaviorSubject<string>('');
   dialogContent$: Observable<string> = this.dialogContentSubject.asObservable();
 
-  private dialogResultSubject = new BehaviorSubject<ResponseObj | undefined>(undefined);
-  dialogResult$: Observable<ResponseObj | undefined> = this.dialogResultSubject.asObservable();
-
   openDialog(title: string, content: string): void {
     this.dialogTitleSubject.next(title);
     this.dialogContentSubject.next(content);
@@ -34,9 +30,5 @@ export class ConfirmationService {
   acceptDialog(): void {
     this.dialogAcceptedSubject.next();
     this.closeDialog();
-  }
-
-  dialogResult(response: ResponseObj) {
-    this.dialogResultSubject.next(response);
   }
 }

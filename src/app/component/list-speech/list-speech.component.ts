@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -8,14 +7,14 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
 import { Subscription } from 'rxjs';
+import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
-  imports: [CommonModule, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
+  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
   templateUrl: './list-speech.component.html',
-  styleUrl: './list-speech.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './list-speech.component.css'
 })
 export class ListSpeechComponent implements OnInit, OnDestroy {
   constructor(

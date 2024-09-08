@@ -1,6 +1,12 @@
-<app-confirmation-dialog></app-confirmation-dialog>
+@defer {
+  <app-toast />
+}
 
 <div class="d-flex flex-column gap-3">
   <app-navigation />
   <router-outlet />
 </div>
+
+@defer {
+  <app-confirmation-dialog />
+}

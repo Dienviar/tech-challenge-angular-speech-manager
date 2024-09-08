@@ -7,10 +7,13 @@ import { take } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../shared/confirmation-dialog/confirmation.service';
 import { SpeechService } from '../speech.service';
+import { RequiredFieldDirective } from '../../core/directive/required-field.directive';
+import { ResponseObj } from '../../core/interface';
+import { ToastService } from '../../shared/toast/toast.service';
 @Component({
   selector: 'app-upsert-speech',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbAlert],
+  imports: [ReactiveFormsModule, NgbAlert, RequiredFieldDirective],
   templateUrl: './upsert-speech.component.html',
   styleUrl: './upsert-speech.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,7 +22,8 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
   constructor(
     private _speechService: SpeechService,
     private _confirmationService: ConfirmationService,
-    private _router: Router
+    private _router: Router,
+    private _toastService: ToastService
   ) {}
 
   speechId = input<number>();
@@ -50,6 +54,11 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
   }
 
   formSubmit() {
+    if (!this.speechForm.valid) {
+      this._toastService.toastMessage({ code: 400, message: 'Please fill all the required field', label: 'danger' } as ResponseObj);
+      return;
+    }
+
     this._confirmationService.openDialog('Confirmation', `Are you sure you want to ${this.speechId() ? 'update' : 'create'} this speech?`);
 
     if (this.speechId()) {
@@ -58,7 +67,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
       });
 
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
-        this._confirmationService.dialogResult(this._speechService.updateSpeech(this.speechForm.value as Speech));
+        this._toastService.toastMessage(this._speechService.updateSpeech(this.speechForm.value as Speech));
         this.disableForm();
       });
     } else {
@@ -71,7 +80,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
       });
 
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
-        this._confirmationService.dialogResult(this._speechService.createSpeech(this.speechForm.value as Speech));
+        this._toastService.toastMessage(this._speechService.createSpeech(this.speechForm.value as Speech));
         this._router.navigateByUrl('/');
       });
     }
@@ -80,7 +89,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
   deleteSpeech() {
     this._confirmationService.openDialog('Confirmation', `Are you sure you want to delete this speech?`);
     this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
-      this._confirmationService.dialogResult(this._speechService.deleteSpeech(this.speechId() as number));
+      this._toastService.toastMessage(this._speechService.deleteSpeech(this.speechId() as number));
 
       this.speechDeleted.emit(true);
     });

@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/cor
 import { NavigationElem } from '../../core/interface';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, NgbModule, RouterModule],
+  imports: [NgClass, NgbModule, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -3,7 +3,7 @@
     <form [formGroup]="speechForm" class="d-flex flex-column gap-3" (ngSubmit)="formSubmit()">
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" id="subject" formControlName="subject" />
+        <input type="text" class="form-control" id="subject" formControlName="subject" [appRequiredField]="true" />
       </div>
 
       <div class="row g-2">

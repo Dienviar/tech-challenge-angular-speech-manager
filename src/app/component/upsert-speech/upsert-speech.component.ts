@@ -7,13 +7,12 @@ import { take } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../shared/confirmation-dialog/confirmation.service';
 import { SpeechService } from '../speech.service';
-import { RequiredFieldDirective } from '../../core/directive/required-field.directive';
 import { ResponseObj } from '../../core/interface';
 import { ToastService } from '../../shared/toast/toast.service';
 @Component({
   selector: 'app-upsert-speech',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbAlert, RequiredFieldDirective],
+  imports: [ReactiveFormsModule, NgbAlert],
   templateUrl: './upsert-speech.component.html',
   styleUrl: './upsert-speech.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -54,6 +53,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
   }
 
   formSubmit() {
+    this.speechForm.markAllAsTouched();
     if (!this.speechForm.valid) {
       this._toastService.toastMessage({ code: 400, message: 'Please fill all the required field', label: 'danger' } as ResponseObj);
       return;
@@ -93,6 +93,11 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
 
       this.speechDeleted.emit(true);
     });
+  }
+
+  controlValidator(controlName: string): boolean {
+    const control = this.speechForm.get(controlName);
+    return control ? control.invalid && (control.touched || control.dirty) : false;
   }
 
   enableForm() {

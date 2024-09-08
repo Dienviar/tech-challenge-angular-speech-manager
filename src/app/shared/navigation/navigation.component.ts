@@ -25,12 +25,8 @@ export class NavigationComponent implements OnInit {
       routerLink: '/'
     },
     {
-      label: 'Create New Speech',
+      label: 'Create Speech',
       routerLink: '/create'
-    },
-    {
-      label: 'Search Speech',
-      routerLink: '/search'
     }
   ]);
 

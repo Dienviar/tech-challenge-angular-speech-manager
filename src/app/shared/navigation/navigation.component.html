@@ -20,7 +20,7 @@
     <div [ngbCollapse]="isCollapsed()" class="navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         @for (item of navigation(); track item.label) {
-          <li class="nav-item p-2">
+          <li class="nav-item">
             <a
               class="nav-link"
               [routerLink]="item.routerLink"

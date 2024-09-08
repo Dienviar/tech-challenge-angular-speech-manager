@@ -1,12 +1,7 @@
-import { AlertType } from './types';
+import { Toast } from '../shared/toast/toast.model';
 
 export interface ResponseObj {
   code: number;
   message: string;
-  label: AlertType;
-}
-
-export interface NavigationElem {
-  label: string;
-  routerLink: string;
+  label: Toast;
 }

@@ -8,13 +8,15 @@ import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
 import { Subscription } from 'rxjs';
 import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { SearchSpeechComponent } from '../search-speech/search-speech.component';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
+  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent],
   templateUrl: './list-speech.component.html',
   styleUrl: './list-speech.component.css',
+  providers: [ModalService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListSpeechComponent implements OnInit, OnDestroy {
@@ -49,10 +51,10 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
         this.windowWidth.set(Math.trunc(width));
 
         if (this.selectedSpeechId() !== -1) {
-          if (width < this.windowBreakPoint && !this._modalService.modalState) {
-            this.openModal();
-          } else if (width > this.windowBreakPoint && this._modalService.modalState) {
-            this.closeModal();
+          if (this.windowWidth() < this.windowBreakPoint && !this._modalService.modalState) {
+            this._modalService.openModal();
+          } else if (this.windowWidth() > this.windowBreakPoint && this._modalService.modalState) {
+            this._modalService.closeModal();
           }
         }
       })
@@ -69,20 +71,12 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
 
   onCardClick(id: number) {
     this.selectedSpeechId.set(id);
-    if (this.windowWidth() < this.windowBreakPoint) this.openModal();
+    if (this.windowWidth() < this.windowBreakPoint) this._modalService.openModal();
   }
 
   onSpeechDeleted() {
     this.clearSelectedSpeechId();
-    if (this.windowWidth() < this.windowBreakPoint) this.closeModal();
-  }
-
-  openModal() {
-    this._modalService.openModal();
-  }
-
-  closeModal() {
-    this._modalService.closeModal();
+    if (this.windowWidth() < this.windowBreakPoint) this._modalService.closeModal();
   }
 
   clearSelectedSpeechId() {

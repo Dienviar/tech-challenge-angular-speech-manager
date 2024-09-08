@@ -1,1 +1,41 @@
-<p>search-speech works!</p>
+@if (modalIsActive) {
+  <ng-container [ngTemplateOutlet]="searchFormTemp"></ng-container>
+} @else {
+  <div class="w-100 d-flex justify-content-end">
+    <button (click)="openSearchModal()" type="button" class="btn btn-success">Search Speech</button>
+  </div>
+
+  <app-modal position="top" padding="un-padded">
+    <div class="w-100 card">
+      <div class="card-body">
+        <ng-container [ngTemplateOutlet]="searchFormTemp"></ng-container>
+      </div>
+    </div>
+  </app-modal>
+}
+
+<ng-template #searchFormTemp>
+  <form [formGroup]="searchForm" [style.flexDirection]="modalIsActive ? 'row' : 'column'" class="d-flex align-items-end gap-2">
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <input type="text" class="form-control" id="subject" formControlName="subject" />
+    </div>
+
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input type="text" class="form-control" id="author" formControlName="author" />
+    </div>
+
+    <div class="form-group">
+      <label for="speech_date">Speech Date</label>
+      <input type="date" class="form-control" id="speech_date" formControlName="speech_date" />
+    </div>
+
+    <div class="form-group">
+      <label for="date_created">Date Created</label>
+      <input type="date" class="form-control" id="date_created" formControlName="date_created" />
+    </div>
+
+    <button [style.width]="modalIsActive ? 'auto' : '100%'" type="button" class="btn btn-success">Search</button>
+  </form>
+</ng-template>

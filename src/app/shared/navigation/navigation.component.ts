@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { NavigationElem } from '../../core/interface';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgClass } from '@angular/common';
+import { NavigationElem } from './navigation.mode';
 
 @Component({
   selector: 'app-navigation',
@@ -37,6 +37,7 @@ export class NavigationComponent implements OnInit {
   }
 
   openNav() {
+    console.log('asd');
     this.isCollapsed.set(!this.isCollapsed());
   }
 }

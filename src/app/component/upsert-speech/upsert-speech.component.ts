@@ -7,8 +7,8 @@ import { take } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../shared/confirmation-dialog/confirmation.service';
 import { SpeechService } from '../speech.service';
-import { ResponseObj } from '../../core/interface';
 import { ToastService } from '../../shared/toast/toast.service';
+import { ResponseObj } from '../../core/interface';
 @Component({
   selector: 'app-upsert-speech',
   standalone: true,

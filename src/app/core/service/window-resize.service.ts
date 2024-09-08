@@ -7,21 +7,16 @@ import { BehaviorSubject } from 'rxjs';
 export class WindowResizeService implements OnDestroy {
   private resizeSubject = new BehaviorSubject<number>(window.innerWidth);
   public resize$ = this.resizeSubject.asObservable();
-  private resizeObserver: ResizeObserver;
+
+  private resizeListener: () => void;
 
   constructor() {
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        this.resizeSubject.next(entry.contentRect.width);
-      }
-    });
-
-    this.resizeObserver.observe(document.body);
-
+    this.resizeListener = () => this.resizeSubject.next(window.innerWidth);
+    window.addEventListener('resize', this.resizeListener);
     this.resizeSubject.next(window.innerWidth);
   }
 
   ngOnDestroy() {
-    this.resizeObserver.disconnect();
+    window.removeEventListener('resize', this.resizeListener);
   }
 }

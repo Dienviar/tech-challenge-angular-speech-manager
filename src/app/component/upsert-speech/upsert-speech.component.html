@@ -31,14 +31,14 @@
         @if (!speechId()) {
           <button type="submit" class="btn btn-success">Create</button>
         } @else if (speechForm.enabled) {
-          <button (click)="deleteSpeech()" type="button" class="btn btn-danger">Delete</button>
           <button (click)="revertFormValue()" type="button" class="btn btn-secondary">Cancel</button>
           @if (!speechForm.pristine) {
             <button type="submit" class="btn btn-success">Save</button>
           }
         } @else {
+          <button (click)="deleteSpeech()" type="button" class="btn btn-danger">Delete</button>
           <button type="button" class="btn btn-primary">Share</button>
-          <button (click)="enableForm()" type="button" class="btn btn-secondary">Edit</button>
+          <button (click)="enableForm()" type="button" class="btn btn-success">Edit</button>
         }
       </div>
     </form>

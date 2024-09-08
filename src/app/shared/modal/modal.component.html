@@ -1,5 +1,5 @@
 @if (_modalService.modalState$ | async) {
-  <div class="modal">
+  <div class="modal modal--{{ position() }} modal--{{ padding() }}">
     <div class="modal__close-button">
       <button (click)="closeModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">

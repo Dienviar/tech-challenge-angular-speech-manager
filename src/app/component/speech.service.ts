@@ -27,8 +27,7 @@ In summary, Angular offers a complete solution for web development. It's a frame
 Thank you!`,
       date_created: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
       date_updated: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
-      is_deleted: false,
-      is_archived: false
+      is_deleted: false
     }
   ];
 

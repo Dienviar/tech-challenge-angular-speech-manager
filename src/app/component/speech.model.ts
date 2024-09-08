@@ -7,5 +7,4 @@ export interface Speech {
   date_created: Date;
   date_updated: Date | undefined;
   is_deleted: boolean;
-  is_archived: boolean;
 }

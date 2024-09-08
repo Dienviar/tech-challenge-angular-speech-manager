@@ -39,8 +39,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
     content: new FormControl(undefined, Validators.required),
     date_created: new FormControl(undefined),
     date_updated: new FormControl(undefined),
-    is_deleted: new FormControl(undefined),
-    is_archived: new FormControl(undefined)
+    is_deleted: new FormControl(undefined)
   });
 
   ngOnInit() {
@@ -75,8 +74,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
         id: this._speechService.getAllSpeechesData.length + 1,
         date_created: new Date(),
         date_updated: undefined,
-        is_deleted: false,
-        is_archived: false
+        is_deleted: false
       });
 
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {

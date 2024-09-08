@@ -1,7 +1,7 @@
 @if (totalPages > 0) {
   <div class="d-flex flex-column gap-4">
     @defer {
-      <app-search-speech />
+      <app-search-speech (searchSpeech)="onSpeechSearch($event)" />
     }
 
     <div class="row">

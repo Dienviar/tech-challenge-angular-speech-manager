@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Speech } from '../speech.model';
 import { FormGroupType } from '../../core/utils';
@@ -22,6 +22,8 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
     private _windowResizeService: WindowResizeService,
     private _modalService: ModalService
   ) {}
+
+  searchSpeech = output<Speech>();
 
   private subscription = new Subscription();
 
@@ -55,5 +57,9 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
 
   openSearchModal() {
     this._modalService.openModal();
+  }
+
+  submitFormSearch() {
+    this.searchSpeech.emit(this.searchForm.value as Speech);
   }
 }

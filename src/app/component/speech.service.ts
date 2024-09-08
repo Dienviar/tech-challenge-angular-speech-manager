@@ -71,4 +71,26 @@ Thank you!`,
     console.log(this.speechData);
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
+
+  searchSpeech(speechSearch: Speech) {
+    const refinedSpeechSearch = Object.fromEntries(Object.entries(speechSearch).filter((attr) => attr[1] !== null));
+
+    const filteredSpeechData = this.speechData.filter((speech) => {
+      return Object.entries(refinedSpeechSearch).every(([key, value]) => {
+        const speechKey = key as keyof typeof speech;
+        if (speechKey in speech) {
+          if (speechKey === 'subject' || speechKey === 'author') {
+            return speech[speechKey].includes(value);
+          }
+          if (speechKey === 'speech_date' || speechKey === 'date_created') {
+            return new Date(speech[speechKey]).toISOString().substring(0, 10).includes(value);
+          }
+          return speech[speechKey] === value;
+        }
+        return false;
+      });
+    });
+
+    console.log(filteredSpeechData);
+  }
 }

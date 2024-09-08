@@ -15,7 +15,7 @@
 }
 
 <ng-template #searchFormTemp>
-  <form [formGroup]="searchForm" [style.flexDirection]="modalIsActive ? 'row' : 'column'" class="d-flex align-items-end gap-2">
+  <form [formGroup]="searchForm" [style.flexDirection]="modalIsActive ? 'row' : 'column'" class="d-flex align-items-end gap-2" (ngSubmit)="submitFormSearch()">
     <div class="form-group">
       <label for="subject">Subject</label>
       <input type="text" class="form-control" id="subject" formControlName="subject" />
@@ -36,6 +36,6 @@
       <input type="date" class="form-control" id="date_created" formControlName="date_created" />
     </div>
 
-    <button [style.width]="modalIsActive ? 'auto' : '100%'" type="button" class="btn btn-success">Search</button>
+    <button type="submit" [style.width]="modalIsActive ? 'auto' : '100%'" class="btn btn-success">Search</button>
   </form>
 </ng-template>

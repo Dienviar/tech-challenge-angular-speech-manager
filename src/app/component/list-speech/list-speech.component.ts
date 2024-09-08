@@ -79,6 +79,10 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     if (this.windowWidth() < this.windowBreakPoint) this._modalService.closeModal();
   }
 
+  onSpeechSearch(speechSearch: Speech) {
+    this._speechService.searchSpeech(speechSearch);
+  }
+
   clearSelectedSpeechId() {
     this.selectedSpeechId.set(-1);
   }

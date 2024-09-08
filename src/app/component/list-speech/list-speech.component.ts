@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,7 @@ import { WindowResizeService } from '../../core/service/window-resize.service';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-speech',
@@ -16,12 +17,14 @@ import { ModalService } from '../../shared/modal/modal.service';
   styleUrl: './list-speech.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListSpeechComponent implements OnInit {
+export class ListSpeechComponent implements OnInit, OnDestroy {
   constructor(
     private _speechService: SpeechService,
     private _windowResizeService: WindowResizeService,
     private _modalService: ModalService
   ) {}
+
+  private subscription = new Subscription();
 
   selectedSpeechId = signal<number>(-1);
 
@@ -41,17 +44,23 @@ export class ListSpeechComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._windowResizeService.resize$.subscribe((width) => {
-      this.windowWidth.set(Math.trunc(width));
+    this.subscription.add(
+      this._windowResizeService.resize$.subscribe((width) => {
+        this.windowWidth.set(Math.trunc(width));
 
-      if (this.selectedSpeechId() !== -1) {
-        if (width < this.windowBreakPoint) {
-          this.openModal();
-        } else if (width > this.windowBreakPoint && this._modalService.modalState) {
-          this.closeModal();
+        if (this.selectedSpeechId() !== -1) {
+          if (width < this.windowBreakPoint && !this._modalService.modalState) {
+            this.openModal();
+          } else if (width > this.windowBreakPoint && this._modalService.modalState) {
+            this.closeModal();
+          }
         }
-      }
-    });
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onPageChange(page: number) {

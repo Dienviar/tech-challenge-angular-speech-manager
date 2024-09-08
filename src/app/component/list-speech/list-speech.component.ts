@@ -8,13 +8,13 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 
 @Component({
-  selector: 'app-speeches',
+  selector: 'app-list-speech',
   standalone: true,
   imports: [CommonModule, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
-  templateUrl: './speeches.component.html',
-  styleUrl: './speeches.component.css'
+  templateUrl: './list-speech.component.html',
+  styleUrl: './list-speech.component.css'
 })
-export class SpeechesComponent implements OnInit {
+export class ListSpeechComponent implements OnInit {
   constructor(
     private _speechService: SpeechService,
     private _windowResizeService: WindowResizeService

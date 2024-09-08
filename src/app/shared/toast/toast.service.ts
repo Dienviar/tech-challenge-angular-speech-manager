@@ -11,5 +11,9 @@ export class ToastService {
 
   toastMessage(response: ResponseObj) {
     this.toastMessageStateSubject.next(response);
+
+    setTimeout(() => {
+      this.toastMessageStateSubject.next(undefined);
+    }, 2000);
   }
 }

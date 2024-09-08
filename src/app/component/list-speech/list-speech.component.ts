@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,8 @@ import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
   standalone: true,
   imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent],
   templateUrl: './list-speech.component.html',
-  styleUrl: './list-speech.component.css'
+  styleUrl: './list-speech.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListSpeechComponent implements OnInit, OnDestroy {
   constructor(

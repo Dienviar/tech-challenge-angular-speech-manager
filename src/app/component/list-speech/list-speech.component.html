@@ -53,6 +53,10 @@
     <div class="col-8">
       @if (windowWidth() > windowBreakPoint) {
         <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+      } @else {
+        <app-modal (modalClose)="clearSelectedSpeechId()">
+          <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
+        </app-modal>
       }
     </div>
   </div>
@@ -76,9 +80,3 @@
     </div>
   }
 </ng-template>
-
-@defer {
-  <app-modal (modalClose)="clearSelectedSpeechId()">
-    <ng-container [ngTemplateOutlet]="speechForm"></ng-container>
-  </app-modal>
-}

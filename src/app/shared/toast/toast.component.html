@@ -1,3 +1,3 @@
 @if (_toastService.toastMessageState$ | async) {
-  <ngb-alert [type]="(_toastService.toastMessageState$ | async)?.label ?? 'secondary'">{{ (_toastService.toastMessageState$ | async)?.message }}</ngb-alert>
+  <ngb-alert class="alert-box" [type]="(_toastService.toastMessageState$ | async)?.label ?? 'secondary'">{{ (_toastService.toastMessageState$ | async)?.message }}</ngb-alert>
 }

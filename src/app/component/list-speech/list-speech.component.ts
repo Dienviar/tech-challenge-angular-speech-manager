@@ -40,7 +40,6 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._speechService.speechData$.subscribe((data) => {
         this.totalPages.set(Math.ceil(data.length / this.pageSize));
-        console.log(this.totalPages());
       })
     );
 

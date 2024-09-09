@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Speech } from './speech.model';
 import { ResponseObj } from '../core/interface';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable({
   providedIn: 'root'
 })
 export class SpeechService {
   private speechData: Speech[] = [
     {
-      id: 1,
+      id: uuidv4(),
       subject: 'The Power of Angular in Modern Web Development',
       speech_date: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
       author: 'Denver Danniel Reyes',
@@ -30,7 +30,7 @@ Thank you!`,
       date_updated: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)')
     },
     {
-      id: 2,
+      id: uuidv4(),
       subject: 'Speech on JavaScript',
       speech_date: new Date('Sat Sep 09 2024 12:30:54 GMT+0800 (Philippine Standard Time)'),
       author: 'Denver Danniel Reyes',
@@ -41,7 +41,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
       date_updated: undefined
     },
     {
-      id: 3,
+      id: uuidv4(),
       subject: 'Hard Work',
       speech_date: new Date('Sat Sep 10 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
       author: 'Steve Jobs',
@@ -62,7 +62,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     return this.speechSubject.asObservable().pipe(map((speechData) => speechData.slice((page - 1) * pageSize, page * pageSize)));
   }
 
-  getAllSpeechById(id: number): Speech {
+  getAllSpeechById(id: string): Speech {
     const speech = this.speechData.find((speech) => speech.id === id);
     if (!speech) {
       throw new Error(`Speech with id ${id} not found`);
@@ -71,8 +71,12 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   }
 
   createSpeech(speech: Speech): ResponseObj {
+    speech.id = uuidv4();
+    speech.date_created = new Date();
+
     const exists = this.speechData.some((s) => s.id === speech.id);
     if (!exists) {
+      console.log(speech);
       this.speechData.push(speech);
       this.speechSubject.next(this.speechData);
       return { code: 200, message: 'Speech has been created', label: 'success' };
@@ -81,6 +85,8 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   }
 
   updateSpeech(speech: Speech): ResponseObj {
+    speech.date_updated = new Date();
+
     const speechIndex = this.speechData.findIndex((obj) => obj.id === speech.id);
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };
 
@@ -90,7 +96,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     return { code: 200, message: 'Speech has been updated', label: 'success' };
   }
 
-  deleteSpeech(id: number): ResponseObj {
+  deleteSpeech(id: string): ResponseObj {
     const speechIndex = this.speechData.findIndex((speech) => speech.id === id);
 
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };

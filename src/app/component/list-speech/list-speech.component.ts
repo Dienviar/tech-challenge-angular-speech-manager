@@ -29,7 +29,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
-  selectedSpeechId = signal<number>(-1);
+  selectedSpeechId = signal<string | undefined>(undefined);
   totalPages = signal<number>(0);
 
   currentPage = signal<number>(1);
@@ -48,7 +48,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
       this._windowResizeService.resize$.subscribe((width) => {
         this.windowWidth.set(Math.trunc(width));
 
-        if (this.selectedSpeechId() !== -1) {
+        if (this.selectedSpeechId()) {
           if (this.windowWidth() < this.windowBreakPoint && !this._modalService.modalState) {
             this._modalService.openModal();
           } else if (this.windowWidth() > this.windowBreakPoint && this._modalService.modalState) {
@@ -67,7 +67,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     this.currentPage.set(page);
   }
 
-  onCardClick(id: number) {
+  onCardClick(id: string) {
     this.selectedSpeechId.set(id);
     if (this.windowWidth() < this.windowBreakPoint) this._modalService.openModal();
   }
@@ -78,11 +78,11 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   }
 
   onSpeechSearch(speechSearch: Speech) {
-    if (this.selectedSpeechId() !== -1) this.selectedSpeechId.set(-1);
+    if (this.selectedSpeechId()) this.selectedSpeechId.set(undefined);
     this._speechService.searchSpeech(speechSearch);
   }
 
   clearSelectedSpeechId() {
-    this.selectedSpeechId.set(-1);
+    this.selectedSpeechId.set(undefined);
   }
 }

@@ -30,7 +30,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
 
   @ViewChild(ShareSpeechComponent) shareSpeechComponent!: ShareSpeechComponent;
 
-  speechId = input<number>();
+  speechId = input<string>();
   fetchSpeech = signal<Speech | undefined>(undefined);
   speechDeleted = output<boolean>();
 
@@ -65,21 +65,11 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
     this._confirmationService.openDialog('Confirmation', `Are you sure you want to ${this.speechId() ? 'update' : 'create'} this speech?`);
 
     if (this.speechId()) {
-      this.speechForm.patchValue({
-        date_updated: new Date()
-      });
-
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
         this._toastService.toastMessage(this._speechService.updateSpeech(this.speechForm.value as Speech));
         this.disableForm();
       });
     } else {
-      this.speechForm.patchValue({
-        id: (this._speechService.getCurrentSpeechDataSubject().at(-1)?.id as number) + 1,
-        date_created: new Date(),
-        date_updated: undefined
-      });
-
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
         this._toastService.toastMessage(this._speechService.createSpeech(this.speechForm.value as Speech));
         this._router.navigateByUrl('/');
@@ -90,7 +80,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
   deleteSpeech() {
     this._confirmationService.openDialog('Confirmation', `Are you sure you want to delete this speech?`);
     this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {
-      this._toastService.toastMessage(this._speechService.deleteSpeech(this.speechId() as number));
+      this._toastService.toastMessage(this._speechService.deleteSpeech(this.speechId() as string));
 
       this.speechDeleted.emit(true);
     });

@@ -1,5 +1,5 @@
 export interface Speech {
-  id: number;
+  id: string;
   subject: string;
   speech_date: Date | string;
   author: string;

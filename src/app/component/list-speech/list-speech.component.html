@@ -78,7 +78,7 @@
 </div>
 
 <ng-template #speechFormTemp>
-  @if (selectedSpeechId() !== -1) {
+  @if (selectedSpeechId()) {
     <app-upsert-speech [speechId]="selectedSpeechId()" (speechDeleted)="onSpeechDeleted()" />
   } @else {
     <div class="card">

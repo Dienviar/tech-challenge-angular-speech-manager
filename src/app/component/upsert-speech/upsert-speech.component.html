@@ -3,28 +3,28 @@
     <form [formGroup]="speechForm" class="d-flex flex-column gap-3" (ngSubmit)="formSubmit()">
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" id="subject" formControlName="subject" [class.is-invalid]="controlValidator('subject')" />
+        <input type="text" class="form-control" id="subject" formControlName="subject" [class.is-invalid]="_formService.controlValidator(speechForm, 'subject')" />
       </div>
 
       <div class="row g-2">
         <div class="col">
           <div class="form-group">
             <label for="author">Author</label>
-            <input type="text" class="form-control" id="author" formControlName="author" [class.is-invalid]="controlValidator('author')" />
+            <input type="text" class="form-control" id="author" formControlName="author" [class.is-invalid]="_formService.controlValidator(speechForm, 'author')" />
           </div>
         </div>
 
         <div class="col">
           <div class="form-group">
             <label for="speech_date">Speech Date</label>
-            <input type="date" class="form-control" id="speech_date" [min]="currentDate" formControlName="speech_date" [class.is-invalid]="controlValidator('speech_date')" />
+            <input type="date" class="form-control" id="speech_date" [min]="currentDate" formControlName="speech_date" [class.is-invalid]="_formService.controlValidator(speechForm, 'speech_date')" />
           </div>
         </div>
       </div>
 
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea class="form-control" id="content" rows="11" formControlName="content" [class.is-invalid]="controlValidator('content')"></textarea>
+        <textarea class="form-control" id="content" rows="11" formControlName="content" [class.is-invalid]="_formService.controlValidator(speechForm, 'content')"></textarea>
       </div>
 
       <div class="d-flex justify-content-end gap-2 mt-3">
@@ -37,10 +37,14 @@
           }
         } @else {
           <button (click)="deleteSpeech()" type="button" class="btn btn-danger">Delete</button>
-          <button type="button" class="btn btn-primary">Share</button>
+          <button (click)="shareSpeechComponent.openModal()" type="button" class="btn btn-primary">Share</button>
           <button (click)="enableForm()" type="button" class="btn btn-success">Edit</button>
         }
       </div>
     </form>
   </div>
 </div>
+
+@defer {
+  <app-share-speech />
+}

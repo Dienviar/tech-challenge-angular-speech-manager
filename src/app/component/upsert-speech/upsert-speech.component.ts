@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnChanges, OnInit, output, signal, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormGroupType } from '../../core/utils';
 import { Speech } from '../speech.model';
@@ -9,21 +9,26 @@ import { ConfirmationService } from '../../shared/confirmation-dialog/confirmati
 import { SpeechService } from '../speech.service';
 import { ToastService } from '../../shared/toast/toast.service';
 import { ResponseObj } from '../../core/interface';
+import { ShareSpeechComponent } from '../share-speech/share-speech.component';
+import { FormService } from '../../core/service/form.service';
 @Component({
   selector: 'app-upsert-speech',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbAlert],
+  imports: [ReactiveFormsModule, NgbAlert, ShareSpeechComponent],
   templateUrl: './upsert-speech.component.html',
   styleUrl: './upsert-speech.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpsertSpeechComponent implements OnInit, OnChanges {
   constructor(
+    public _formService: FormService,
     private _speechService: SpeechService,
     private _confirmationService: ConfirmationService,
     private _router: Router,
     private _toastService: ToastService
   ) {}
+
+  @ViewChild(ShareSpeechComponent) shareSpeechComponent!: ShareSpeechComponent;
 
   speechId = input<number>();
   fetchSpeech = signal<Speech | undefined>(undefined);
@@ -89,11 +94,6 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
 
       this.speechDeleted.emit(true);
     });
-  }
-
-  controlValidator(controlName: string): boolean {
-    const control = this.speechForm.get(controlName);
-    return control ? control.invalid && (control.touched || control.dirty) : false;
   }
 
   enableForm() {

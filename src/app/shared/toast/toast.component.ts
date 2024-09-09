@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ToastService } from './toast.service';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -8,7 +8,8 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [NgIf, NgbAlertModule, AsyncPipe],
   templateUrl: './toast.component.html',
-  styleUrl: './toast.component.css'
+  styleUrl: './toast.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastComponent {
   constructor(public _toastService: ToastService) {}

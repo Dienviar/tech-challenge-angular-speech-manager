@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Speech } from './speech.model';
 import { ResponseObj } from '../core/interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -113,5 +113,25 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     });
 
     this.speechSubject.next(filteredSpeechData);
+  }
+
+  shareSpeech(emails: string[]): Observable<ResponseObj> {
+    return of(emails).pipe(
+      map((emailList: string[]) => {
+        if (emailList.length === 0) {
+          return {
+            code: 400,
+            message: 'No email addresses provided',
+            label: 'danger'
+          } as ResponseObj;
+        }
+
+        return {
+          code: 200,
+          message: `Speech has been shared with ${emailList.length} recipient(s)`,
+          label: 'success'
+        } as ResponseObj;
+      })
+    );
   }
 }

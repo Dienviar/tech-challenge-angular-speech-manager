@@ -54,6 +54,10 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
   public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
 
+  manualSpeechSubjectNotify() {
+    this.speechSubject.next(this.speechData);
+  }
+
   getCurrentSpeechDataSubject(): Speech[] {
     return this.speechSubject.getValue();
   }
@@ -98,10 +102,8 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
 
   deleteSpeech(id: string): ResponseObj {
     const speechIndex = this.speechData.findIndex((speech) => speech.id === id);
-
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };
-    this.speechData = this.speechSubject.getValue().filter((speech) => speech.id !== id);
-    this.speechSubject.next(this.speechData);
+    this.speechData = this.speechData.filter((speech) => speech.id !== id);
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -27,6 +27,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     private _modalService: ModalService
   ) {}
 
+  @ViewChild(SearchSpeechComponent) searchSpeechComponent!: SearchSpeechComponent;
   private subscription = new Subscription();
 
   selectedSpeechId = signal<string | undefined>(undefined);
@@ -75,6 +76,12 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   onSpeechDeleted() {
     this.clearSelectedSpeechId();
     if (this.windowWidth() < this.windowBreakPoint) this._modalService.closeModal();
+
+    if (Object.values(this.searchSpeechComponent.searchForm.value).some((value) => value !== null)) {
+      this._speechService.searchSpeech(this.searchSpeechComponent.searchForm.value as Speech);
+    } else {
+      this._speechService.manualSpeechSubjectNotify();
+    }
   }
 
   onSpeechSearch(speechSearch: Speech) {

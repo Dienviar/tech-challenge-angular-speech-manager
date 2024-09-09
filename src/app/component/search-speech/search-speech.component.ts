@@ -23,10 +23,9 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
     private _modalService: ModalService
   ) {}
 
-  searchSpeech = output<Speech>();
-
   private subscription = new Subscription();
 
+  searchSpeech = output<Speech>();
   windowWidth = signal<number>(0);
 
   searchForm = new FormGroup<FormGroupType<Partial<Speech>>>({

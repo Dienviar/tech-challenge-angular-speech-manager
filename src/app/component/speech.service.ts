@@ -58,6 +58,10 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     return this.speechSubject.getValue();
   }
 
+  getSpeechDataSubjectPaginated(page: number, pageSize: number): Observable<Speech[]> {
+    return this.speechSubject.asObservable().pipe(map((speechData) => speechData.slice((page - 1) * pageSize, page * pageSize)));
+  }
+
   getAllSpeechById(id: number): Speech {
     const speech = this.speechData.find((speech) => speech.id === id);
     if (!speech) {
@@ -90,7 +94,8 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     const speechIndex = this.speechData.findIndex((speech) => speech.id === id);
 
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };
-    this.speechSubject.next(this.speechSubject.getValue().filter((speech) => speech.id !== id));
+    this.speechData = this.speechSubject.getValue().filter((speech) => speech.id !== id);
+    this.speechSubject.next(this.speechData);
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
 

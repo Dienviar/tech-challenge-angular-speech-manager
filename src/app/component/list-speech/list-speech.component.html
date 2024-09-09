@@ -6,7 +6,7 @@
   @if (totalPages() > 0) {
     <div class="row">
       <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
-        @for (item of _speechService.speechData$ | async; track item.id) {
+        @for (item of _speechService.getSpeechDataSubjectPaginated(currentPage(), pageSize) | async; track item.id) {
           <div
             (keydown.enter)="onCardClick(item.id)"
             (keydown.space)="onCardClick(item.id)"

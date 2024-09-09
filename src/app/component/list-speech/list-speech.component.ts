@@ -37,9 +37,12 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   windowWidth = signal<number>(0);
 
   ngOnInit() {
-    this._speechService.speechData$.subscribe((data) => {
-      this.totalPages.set(Math.ceil(data.length / this.pageSize));
-    });
+    this.subscription.add(
+      this._speechService.speechData$.subscribe((data) => {
+        this.totalPages.set(Math.ceil(data.length / this.pageSize));
+        console.log(this.totalPages());
+      })
+    );
 
     this.subscription.add(
       this._windowResizeService.resize$.subscribe((width) => {

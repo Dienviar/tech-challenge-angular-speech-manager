@@ -7,13 +7,13 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
 import { Subscription } from 'rxjs';
-import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { SearchSpeechComponent } from '../search-speech/search-speech.component';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent],
+  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent, AsyncPipe],
   templateUrl: './list-speech.component.html',
   styleUrl: './list-speech.component.css',
   providers: [ModalService],
@@ -21,7 +21,7 @@ import { SearchSpeechComponent } from '../search-speech/search-speech.component'
 })
 export class ListSpeechComponent implements OnInit, OnDestroy {
   constructor(
-    private _speechService: SpeechService,
+    public _speechService: SpeechService,
     private _windowResizeService: WindowResizeService,
     private _modalService: ModalService
   ) {}
@@ -29,23 +29,18 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   selectedSpeechId = signal<number>(-1);
+  totalPages = signal<number>(0);
 
   currentPage = signal<number>(1);
   pageSize = 5;
   windowBreakPoint = 900;
   windowWidth = signal<number>(0);
 
-  get totalPages(): number {
-    return Math.ceil(this._speechService.getAllSpeechesData.length / this.pageSize);
-  }
-
-  get pagedData(): Speech[] {
-    const start = (this.currentPage() - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    return this._speechService.getAllSpeechesData.slice(start, end);
-  }
-
   ngOnInit() {
+    this._speechService.speechData$.subscribe((data) => {
+      this.totalPages.set(Math.ceil(data.length / this.pageSize));
+    });
+
     this.subscription.add(
       this._windowResizeService.resize$.subscribe((width) => {
         this.windowWidth.set(Math.trunc(width));

@@ -61,13 +61,3 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
-.dialog__button--success {
-  background-color: #28a745;
-  color: white;
-}
-
-.dialog__button--secondary {
-  background-color: #6c757d;
-  color: white;
-}

@@ -4,7 +4,7 @@ import { Speech } from '../speech.model';
 import { FormGroupType } from '../../core/utils';
 import { WindowResizeService } from '../../core/service/window-resize.service';
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { debounceTime, Subscription } from 'rxjs';
 import { ModalService } from '../../shared/modal/modal.service';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
@@ -34,8 +34,7 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
     speech_date: new FormControl(undefined),
     author: new FormControl(undefined),
     date_created: new FormControl(undefined),
-    date_updated: new FormControl(undefined),
-    is_deleted: new FormControl(undefined)
+    date_updated: new FormControl(undefined)
   });
 
   get modalIsActive(): boolean {
@@ -48,6 +47,11 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
         this.windowWidth.set(Math.trunc(width));
       })
     );
+
+    this.searchForm.valueChanges.pipe(debounceTime(200)).subscribe((formValues) => {
+      console.log('asd');
+      this.searchSpeech.emit(formValues as Speech);
+    });
   }
 
   ngOnDestroy() {
@@ -56,9 +60,5 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
 
   openSearchModal() {
     this._modalService.openModal();
-  }
-
-  submitFormSearch() {
-    this.searchSpeech.emit(this.searchForm.value as Speech);
   }
 }

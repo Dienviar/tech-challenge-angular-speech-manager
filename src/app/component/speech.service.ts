@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Speech } from './speech.model';
 import { ResponseObj } from '../core/interface';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,35 @@ In summary, Angular offers a complete solution for web development. It's a frame
 
 Thank you!`,
       date_created: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
-      date_updated: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
-      is_deleted: false
+      date_updated: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)')
+    },
+    {
+      id: 2,
+      subject: 'Speech on JavaScript',
+      speech_date: new Date('Sat Sep 09 2024 12:30:54 GMT+0800 (Philippine Standard Time)'),
+      author: 'Denver Danniel Reyes',
+      content: `Today, I want to talk to you about one of the most influential programming languages of the modern web: JavaScript.
+
+JavaScript is everywhere. Whether you're browsing social media, shopping online, or checking your bank balance, JavaScript is the force behind many of the dynamic and interactive elements you see on the web. From humble beginnings as a simple scripting language introduced in 1995, it has evolved into a cornerstone of web development, powering everything from small websites to complex, large-scale applications.`,
+      date_created: new Date('Sat Sep 08 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
+      date_updated: undefined
+    },
+    {
+      id: 3,
+      subject: 'Hard Work',
+      speech_date: new Date('Sat Sep 10 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
+      author: 'Steve Jobs',
+      content: `Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do.`,
+      date_created: new Date('Sat Sep 09 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
+      date_updated: undefined
     }
   ];
 
-  get getAllSpeechesData(): Speech[] {
-    return this.speechData;
+  private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
+  public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
+
+  getCurrentSpeechData(): Speech[] {
+    return this.speechSubject.getValue();
   }
 
   getAllSpeechById(id: number): Speech {
@@ -65,9 +88,8 @@ Thank you!`,
 
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };
 
-    this.speechData = this.speechData.filter((speech) => speech.id !== id);
+    this.speechSubject.next(this.getCurrentSpeechData().filter((speech) => speech.id !== id));
 
-    console.log(this.speechData);
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
 
@@ -79,7 +101,7 @@ Thank you!`,
         const speechKey = key as keyof typeof speech;
         if (speechKey in speech) {
           if (speechKey === 'subject' || speechKey === 'author') {
-            return speech[speechKey].includes(value);
+            return speech[speechKey].toLowerCase().includes(value.toLowerCase());
           }
           if (speechKey === 'speech_date' || speechKey === 'date_created') {
             return new Date(speech[speechKey]).toISOString().substring(0, 10).includes(value);
@@ -90,6 +112,6 @@ Thank you!`,
       });
     });
 
-    console.log(filteredSpeechData);
+    this.speechSubject.next(filteredSpeechData);
   }
 }

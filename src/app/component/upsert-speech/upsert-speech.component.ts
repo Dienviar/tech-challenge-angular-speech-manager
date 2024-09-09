@@ -38,8 +38,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
     author: new FormControl(undefined, Validators.required),
     content: new FormControl(undefined, Validators.required),
     date_created: new FormControl(undefined),
-    date_updated: new FormControl(undefined),
-    is_deleted: new FormControl(undefined)
+    date_updated: new FormControl(undefined)
   });
 
   ngOnInit() {
@@ -71,10 +70,9 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
       });
     } else {
       this.speechForm.patchValue({
-        id: this._speechService.getAllSpeechesData.length + 1,
+        id: this._speechService.getCurrentSpeechData().values.length + 1,
         date_created: new Date(),
-        date_updated: undefined,
-        is_deleted: false
+        date_updated: undefined
       });
 
       this._confirmationService.dialogAccepted$.pipe(take(1)).subscribe(() => {

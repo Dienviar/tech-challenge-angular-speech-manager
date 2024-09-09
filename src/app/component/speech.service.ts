@@ -54,7 +54,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
   public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
 
-  getCurrentSpeechData(): Speech[] {
+  getCurrentSpeechDataSubject(): Speech[] {
     return this.speechSubject.getValue();
   }
 
@@ -67,11 +67,13 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   }
 
   createSpeech(speech: Speech): ResponseObj {
-    if (this.speechData.push(speech)) {
+    const exists = this.speechData.some((s) => s.id === speech.id);
+    if (!exists) {
+      this.speechData.push(speech);
+      this.speechSubject.next(this.speechData);
       return { code: 200, message: 'Speech has been created', label: 'success' };
     }
-
-    return { code: 404, message: 'Speech not found', label: 'danger' };
+    return { code: 400, message: 'Speech already exists', label: 'danger' };
   }
 
   updateSpeech(speech: Speech): ResponseObj {
@@ -80,6 +82,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
 
     const updatedSpeech = { ...this.speechData[speechIndex], ...speech };
     this.speechData = [...this.speechData.slice(0, speechIndex), updatedSpeech, ...this.speechData.slice(speechIndex + 1)];
+    this.speechSubject.next(this.speechData);
     return { code: 200, message: 'Speech has been updated', label: 'success' };
   }
 
@@ -87,13 +90,11 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     const speechIndex = this.speechData.findIndex((speech) => speech.id === id);
 
     if (speechIndex === -1) return { code: 404, message: 'Speech not found', label: 'danger' };
-
-    this.speechSubject.next(this.getCurrentSpeechData().filter((speech) => speech.id !== id));
-
+    this.speechSubject.next(this.speechSubject.getValue().filter((speech) => speech.id !== id));
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
 
-  searchSpeech(speechSearch: Speech) {
+  searchSpeech(speechSearch: Partial<Speech>) {
     const refinedSpeechSearch = Object.fromEntries(Object.entries(speechSearch).filter((attr) => attr[1] !== null));
 
     const filteredSpeechData = this.speechData.filter((speech) => {
@@ -101,10 +102,13 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
         const speechKey = key as keyof typeof speech;
         if (speechKey in speech) {
           if (speechKey === 'subject' || speechKey === 'author') {
-            return speech[speechKey].toLowerCase().includes(value.toLowerCase());
+            return speech[speechKey].toLowerCase().includes((value as string).toLowerCase());
           }
           if (speechKey === 'speech_date' || speechKey === 'date_created') {
-            return new Date(speech[speechKey]).toISOString().substring(0, 10).includes(value);
+            return new Date(speech[speechKey])
+              .toISOString()
+              .substring(0, 10)
+              .includes(value as string);
           }
           return speech[speechKey] === value;
         }

@@ -75,7 +75,7 @@ export class UpsertSpeechComponent implements OnInit, OnChanges {
       });
     } else {
       this.speechForm.patchValue({
-        id: this._speechService.getCurrentSpeechData().values.length + 1,
+        id: this._speechService.getCurrentSpeechDataSubject().values.length + 1,
         date_created: new Date(),
         date_updated: undefined
       });

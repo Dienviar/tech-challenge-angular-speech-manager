@@ -10,7 +10,7 @@
         <div class="d-flex flex-column gap-2" formArrayName="emails">
           @for (control of emailFormArray.controls; track control; let i = $index) {
             <div [formGroupName]="i" class="input-group">
-              <input formControlName="email" class="form-control" placeholder="Enter email" type="email" [class.is-invalid]="_formService.controlValidator(getFormGroup(i), 'email')" />
+              <input formControlName="email" class="form-control" placeholder="Enter recipient email" type="email" [class.is-invalid]="_formService.controlValidator(getFormGroup(i), 'email')" />
               @if (emailFormArray.controls.length > 1) {
                 <button type="button" (click)="removeControl(i)" class="btn btn-outline-danger">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">

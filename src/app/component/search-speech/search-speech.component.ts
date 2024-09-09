@@ -49,7 +49,6 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
     );
 
     this.searchForm.valueChanges.pipe(debounceTime(200)).subscribe((formValues) => {
-      console.log('asd');
       this.searchSpeech.emit(formValues as Speech);
     });
   }

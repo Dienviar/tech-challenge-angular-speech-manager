@@ -23,7 +23,7 @@ import { RouterModule } from '@angular/router';
 export class ListSpeechComponent implements OnInit, OnDestroy {
   constructor(
     public _speechService: SpeechService,
-    private _windowResizeService: WindowResizeService,
+    public _windowResizeService: WindowResizeService,
     private _modalService: ModalService
   ) {}
 
@@ -38,6 +38,8 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   windowBreakPoint = 900;
   windowWidth = signal<number>(0);
 
+  x = 0;
+
   ngOnInit() {
     this.subscription.add(
       this._speechService.speechData$.subscribe((data) => {
@@ -46,7 +48,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this._windowResizeService.resize$.subscribe((width) => {
+      this._windowResizeService.windowWidth$.subscribe((width) => {
         this.windowWidth.set(Math.trunc(width));
 
         if (this.selectedSpeechId()) {
@@ -56,6 +58,14 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
             this._modalService.closeModal();
           }
         }
+      })
+    );
+
+    this.subscription.add(
+      this._windowResizeService.windowHeight$.subscribe((height) => {
+        this.x = Math.trunc(height) - 210;
+
+        console.log(this.x);
       })
     );
   }

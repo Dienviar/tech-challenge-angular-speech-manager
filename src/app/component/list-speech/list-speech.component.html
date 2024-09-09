@@ -5,7 +5,7 @@
 
   @if (totalPages() > 0) {
     <div class="row">
-      <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" class="d-flex flex-column gap-3">
+      <div [ngClass]="{ 'col-4': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }" [style.height]="x + 'px'" class="d-flex overflow-y-scroll flex-column gap-3">
         @for (item of _speechService.getSpeechDataSubjectPaginated(currentPage(), pageSize) | async; track item.id) {
           <div
             (keydown.enter)="onCardClick(item.id)"
@@ -55,7 +55,7 @@
           </nav>
         </div>
       </div>
-      <div class="col-8">
+      <div class="col-8 overflow-y-scroll" [style.height]="x + 'px'">
         @if (windowWidth() > windowBreakPoint) {
           <ng-container [ngTemplateOutlet]="speechFormTemp"></ng-container>
         } @else {
@@ -79,6 +79,8 @@
 
 <ng-template #speechFormTemp>
   @if (selectedSpeechId()) {
+    <!-- <div [style.height]="x + 'px'" [style.paddingRight]="'12px'" class="overflow-y-scroll"></div> -->
+
     <app-upsert-speech [speechId]="selectedSpeechId()" (speechDeleted)="onSpeechDeleted()" />
   } @else {
     <div class="card">
@@ -88,3 +90,5 @@
     </div>
   }
 </ng-template>
+
+<!-- continue this tomorrow -->

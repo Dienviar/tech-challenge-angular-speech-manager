@@ -42,7 +42,7 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this._windowResizeService.resize$.subscribe((width) => {
+      this._windowResizeService.windowWidth$.subscribe((width) => {
         this.windowWidth.set(Math.trunc(width));
       })
     );

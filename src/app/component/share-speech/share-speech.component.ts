@@ -82,7 +82,8 @@ export class ShareSpeechComponent implements OnInit {
   }
 
   closeModal() {
-    this.shareForm.reset();
+    this.emailFormArray.controls.length = 1;
+    this.emailFormArray.reset();
     this._modalService.closeModal();
   }
 }

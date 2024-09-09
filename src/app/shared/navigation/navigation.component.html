@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md">
   <div class="container-fluid">
-    <p class="navbar-brand">Speech App</p>
+    <p class="navbar-brand">Speech Manager</p>
 
     <button class="navbar-toggler" type="button" (click)="openNav()">
       @if (isCollapsed()) {
@@ -17,7 +17,7 @@
       }
     </button>
 
-    <div [ngbCollapse]="isCollapsed()" class="navbar-collapse justify-content-end" id="navbarNav">
+    <div [ngbCollapse]="isCollapsed()" class="navbar-collapse justify-content-end mt-3" id="navbarNav">
       <ul class="navbar-nav">
         @for (item of navigation(); track item.label) {
           <li class="nav-item">

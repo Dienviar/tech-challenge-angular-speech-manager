@@ -60,7 +60,9 @@
           <ng-container [ngTemplateOutlet]="speechFormTemp"></ng-container>
         } @else {
           <app-modal position="center" padding="padded" (modalClose)="clearSelectedSpeechId()">
-            <ng-container [ngTemplateOutlet]="speechFormTemp"></ng-container>
+            <div class="w-100">
+              <ng-container [ngTemplateOutlet]="speechFormTemp"></ng-container>
+            </div>
           </app-modal>
         }
       </div>

@@ -4,6 +4,11 @@
   cursor: default;
 }
 
+.navbar-brand {
+  margin: 0;
+  padding: 0;
+}
+
 .nav-link {
   cursor: pointer;
   user-select: none;
@@ -17,9 +22,28 @@
   border: none;
   background-color: none;
   outline: none;
+  padding: 0;
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.navbar-nav .nav-item .nav-link {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .navbar-collapse {
-  padding: 10px;
   box-shadow: 10px;
+}
+.container-fluid {
+  padding: 0;
+  margin: 0;
 }

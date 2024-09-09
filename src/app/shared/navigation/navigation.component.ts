@@ -37,7 +37,6 @@ export class NavigationComponent implements OnInit {
   }
 
   openNav() {
-    console.log('asd');
     this.isCollapsed.set(!this.isCollapsed());
   }
 }

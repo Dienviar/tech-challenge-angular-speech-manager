@@ -2,7 +2,7 @@
   <ng-container [ngTemplateOutlet]="searchFormTemp"></ng-container>
 } @else {
   <div class="w-100 d-flex justify-content-end">
-    <button (click)="openSearchModal()" type="button" class="btn btn-success">Search Speech</button>
+    <button (click)="openSearchModal()" type="button" class="btn btn-primary">Search Speech</button>
   </div>
 
   <app-modal position="top" padding="un-padded">
@@ -36,6 +36,6 @@
       <input type="date" class="form-control" id="date_created" formControlName="date_created" />
     </div>
 
-    <button (click)="searchForm.reset()" [style.width]="modalIsActive ? 'auto' : '100%'" class="btn btn-primary">Clear Filter</button>
+    <button (click)="searchForm.reset()" [style.width]="modalIsActive ? 'auto' : '100%'" class="btn btn-secondary">Clear Filter</button>
   </form>
 </ng-template>

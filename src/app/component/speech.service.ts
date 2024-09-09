@@ -80,7 +80,6 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
 
     const exists = this.speechData.some((s) => s.id === speech.id);
     if (!exists) {
-      console.log(speech);
       this.speechData.push(speech);
       this.speechSubject.next(this.speechData);
       return { code: 200, message: 'Speech has been created', label: 'success' };

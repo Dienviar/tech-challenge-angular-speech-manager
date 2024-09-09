@@ -85,6 +85,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   }
 
   onSpeechSearch(speechSearch: Speech) {
+    if (this.currentPage() !== 1) this.currentPage.set(1);
     if (this.selectedSpeechId()) this.selectedSpeechId.set(undefined);
     this._speechService.searchSpeech(speechSearch);
   }

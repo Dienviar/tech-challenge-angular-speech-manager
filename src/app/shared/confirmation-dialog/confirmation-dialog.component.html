@@ -3,7 +3,6 @@
     <div class="dialog__box">
       <div class="dialog__header">
         <h2 class="dialog__title">{{ _confirmationService.dialogTitle$ | async }}</h2>
-        <button (click)="cancel()" type="button" class="dialog__close-button">×</button>
       </div>
       <div class="dialog__content">
         <p>{{ _confirmationService.dialogContent$ | async }}</p>

@@ -15,12 +15,6 @@ export class ConfirmationDialogComponent {
 
   accept() {
     this._confirmationService.acceptDialog();
-
-    // this.isAlertActive.set(true);
-
-    // setTimeout(() => {
-    //   this.isAlertActive.set(false);
-    // }, 3000);
   }
 
   cancel() {

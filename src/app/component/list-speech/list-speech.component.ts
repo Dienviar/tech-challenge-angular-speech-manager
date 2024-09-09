@@ -9,11 +9,12 @@ import { ModalService } from '../../shared/modal/modal.service';
 import { Subscription } from 'rxjs';
 import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { SearchSpeechComponent } from '../search-speech/search-speech.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent, AsyncPipe],
+  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent, AsyncPipe, RouterModule],
   templateUrl: './list-speech.component.html',
   styleUrl: './list-speech.component.css',
   providers: [ModalService],

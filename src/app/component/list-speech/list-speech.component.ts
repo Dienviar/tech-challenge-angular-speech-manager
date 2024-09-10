@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { Speech } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
@@ -6,7 +6,7 @@ import { WindowResizeService } from '../../core/service/window-resize.service';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { SearchSpeechComponent } from '../search-speech/search-speech.component';
 import { RouterModule } from '@angular/router';
@@ -20,7 +20,7 @@ import { RouterModule } from '@angular/router';
   providers: [ModalService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListSpeechComponent implements OnInit, OnDestroy {
+export class ListSpeechComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     public _speechService: SpeechService,
     public _windowResizeService: WindowResizeService,
@@ -28,25 +28,26 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   ) {}
 
   @ViewChild(SearchSpeechComponent) searchSpeechComponent!: SearchSpeechComponent;
+  @ViewChildren('speechItem') speechItems!: QueryList<ElementRef>;
+
   private subscription = new Subscription();
 
   selectedSpeechId = signal<string | undefined>(undefined);
   totalPages = signal<number>(0);
 
-  currentPage = signal<number>(1);
-  pageSize = 5;
+  pageSize = signal<number>(5);
   windowBreakPoint = 900;
   windowWidth = signal<number>(0);
+  windowHeight = signal<number>(0);
 
-  x = 0;
+  paginatedSpeechData$ = new BehaviorSubject<Speech[]>([]);
+  currentPage$ = new BehaviorSubject<number>(1);
 
   ngOnInit() {
-    this.subscription.add(
-      this._speechService.speechData$.subscribe((data) => {
-        this.totalPages.set(Math.ceil(data.length / this.pageSize));
-      })
-    );
+    this.setDataPages(1);
+  }
 
+  ngAfterViewInit() {
     this.subscription.add(
       this._windowResizeService.windowWidth$.subscribe((width) => {
         this.windowWidth.set(Math.trunc(width));
@@ -60,12 +61,25 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
         }
       })
     );
-
     this.subscription.add(
       this._windowResizeService.windowHeight$.subscribe((height) => {
-        this.x = Math.trunc(height) - 210;
+        const navHeight = 210;
 
-        console.log(this.x);
+        const adjustedHeight = Math.trunc(height) - navHeight;
+        this.windowHeight.set(adjustedHeight);
+
+        let calculatedPageSize = this.pageSize();
+        if (this.speechItems && this.speechItems.first) {
+          const itemHeight = this.speechItems.first.nativeElement.offsetHeight;
+          if (itemHeight) {
+            calculatedPageSize = Math.floor(this.windowHeight() / itemHeight);
+          }
+        }
+
+        this.pageSize.set(calculatedPageSize > 0 ? calculatedPageSize : 1);
+
+        this.setDataPages(1);
+        this.currentPage$.next(1);
       })
     );
   }
@@ -75,7 +89,15 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(page: number) {
-    this.currentPage.set(page);
+    this.currentPage$.next(page);
+    this.setDataPages(page);
+  }
+
+  setDataPages(startPage: number, endPage: number = this.pageSize()) {
+    this._speechService.getSpeechDataSubjectPaginated(startPage, endPage).subscribe((response) => {
+      this.paginatedSpeechData$.next(response);
+      this.totalPages.set(Math.ceil(this._speechService.getCurrentSpeechDataSubject().length / this.pageSize()));
+    });
   }
 
   onCardClick(id: string) {
@@ -92,10 +114,12 @@ export class ListSpeechComponent implements OnInit, OnDestroy {
     } else {
       this._speechService.manualSpeechSubjectNotify();
     }
+
+    if (this.totalPages() === this.currentPage$.value - 1 && this.paginatedSpeechData$.value.length === 0) this.onPageChange(this.currentPage$.value - 1);
   }
 
   onSpeechSearch(speechSearch: Speech) {
-    if (this.currentPage() !== 1) this.currentPage.set(1);
+    if (this.currentPage$.value !== 1) this.currentPage$.next(1);
     if (this.selectedSpeechId()) this.selectedSpeechId.set(undefined);
     this._speechService.searchSpeech(speechSearch);
   }

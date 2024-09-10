@@ -7,14 +7,15 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { SpeechService } from '../speech.service';
 import { ModalService } from '../../shared/modal/modal.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import { SearchSpeechComponent } from '../search-speech/search-speech.component';
 import { RouterModule } from '@angular/router';
+import { TransformLabelPipe } from '../../core/pipe/transform-label.pipe';
 
 @Component({
   selector: 'app-list-speech',
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent, AsyncPipe, RouterModule],
+  imports: [NgClass, NgTemplateOutlet, DatePipe, UpsertSpeechComponent, NgbAlertModule, ModalComponent, SearchSpeechComponent, AsyncPipe, RouterModule, TransformLabelPipe, TitleCasePipe],
   templateUrl: './list-speech.component.html',
   styleUrl: './list-speech.component.css',
   providers: [ModalService],
@@ -39,15 +40,24 @@ export class ListSpeechComponent implements OnInit, OnDestroy, AfterViewInit {
   windowBreakPoint = 900;
   windowWidth = signal<number>(0);
   windowHeight = signal<number>(0);
+  searchFormValue = signal<[string, string][] | undefined>(undefined);
   sortSpeechDataState = signal<SpeechDataSortState>(['date_created', 'desc']);
 
   paginatedSpeechData$ = new BehaviorSubject<Speech[]>([]);
   currentPage$ = new BehaviorSubject<number>(1);
 
   ngOnInit() {
-    this._speechService.sortSpeechData$.subscribe((state) => {
-      this.sortSpeechDataState.set(state);
-    });
+    this.subscription.add(
+      this._speechService.filterSpeechData$.subscribe((speechSearch) => {
+        this.searchFormValue.set(Object.entries(this._speechService.removePropertyNullValue(speechSearch) as Speech));
+      })
+    );
+
+    this.subscription.add(
+      this._speechService.sortSpeechData$.subscribe((state) => {
+        this.sortSpeechDataState.set(state);
+      })
+    );
 
     this.setDataPages(1);
   }

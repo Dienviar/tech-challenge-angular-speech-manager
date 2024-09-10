@@ -4,9 +4,10 @@ import { Speech } from '../speech.model';
 import { FormGroupType } from '../../core/utils';
 import { WindowResizeService } from '../../core/service/window-resize.service';
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { debounceTime, Subscription } from 'rxjs';
+import { debounceTime, Subscription, take } from 'rxjs';
 import { ModalService } from '../../shared/modal/modal.service';
 import { ModalComponent } from '../../shared/modal/modal.component';
+import { SpeechService } from '../speech.service';
 
 @Component({
   selector: 'app-search-speech',
@@ -20,7 +21,8 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 export class SearchSpeechComponent implements OnInit, OnDestroy {
   constructor(
     private _windowResizeService: WindowResizeService,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    private _speechService: SpeechService
   ) {}
 
   private subscription = new Subscription();
@@ -49,6 +51,10 @@ export class SearchSpeechComponent implements OnInit, OnDestroy {
 
     this.searchForm.valueChanges.pipe(debounceTime(200)).subscribe((formValues) => {
       this.searchSpeech.emit(formValues as Speech);
+    });
+
+    this._speechService.filterSpeechData$.pipe(take(1)).subscribe((speechSearch) => {
+      if (speechSearch) this.searchForm.patchValue(speechSearch);
     });
   }
 

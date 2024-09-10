@@ -54,6 +54,9 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
   private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
   public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
 
+  private filterSpeechDataSubject: BehaviorSubject<Speech> = new BehaviorSubject<Speech>({} as Speech);
+  public filterSpeechData$: Observable<Speech> = this.filterSpeechDataSubject.asObservable();
+
   private sortSpeechDataSubject: BehaviorSubject<SpeechDataSortState> = new BehaviorSubject<SpeechDataSortState>(['date_created', 'desc']);
   public sortSpeechData$: Observable<SpeechDataSortState> = this.sortSpeechDataSubject.asObservable();
 
@@ -109,8 +112,12 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     return { code: 200, message: 'Speech has been deleted', label: 'success' };
   }
 
-  searchSpeech(speechSearch: Partial<Speech>) {
-    const refinedSpeechSearch = Object.fromEntries(Object.entries(speechSearch).filter((attr) => attr[1] !== null));
+  removePropertyNullValue(obj: Speech): Partial<Speech> {
+    return Object.fromEntries(Object.entries(obj).filter((attr) => attr[1] !== null));
+  }
+
+  searchSpeech(speechSearch: Speech) {
+    const refinedSpeechSearch = this.removePropertyNullValue(speechSearch);
 
     const filteredSpeechData = this.speechData.filter((speech) => {
       return Object.entries(refinedSpeechSearch).every(([key, value]) => {
@@ -131,6 +138,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
       });
     });
 
+    this.filterSpeechDataSubject.next(speechSearch);
     this.speechSubject.next(filteredSpeechData);
   }
 

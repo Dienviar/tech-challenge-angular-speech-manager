@@ -61,6 +61,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       })
     );
+
     this.subscription.add(
       this._windowResizeService.windowHeight$.subscribe((height) => {
         const navHeight = 210;

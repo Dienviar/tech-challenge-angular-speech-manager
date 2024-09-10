@@ -49,3 +49,18 @@
   background-color: var(--disabled-color);
   border: none;
 }
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--page-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 5px;
+  cursor: pointer;
+}

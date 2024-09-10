@@ -51,6 +51,20 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     }
   ];
 
+  constructor() {
+    for (let i = 0; i < 30; i++) {
+      this.speechData.push({
+        id: uuidv4(),
+        subject: Math.random().toString(36).substring(7),
+        speech_date: new Date(),
+        author: '',
+        content: '',
+        date_created: new Date(),
+        date_updated: undefined
+      });
+    }
+  }
+
   private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
   public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
 

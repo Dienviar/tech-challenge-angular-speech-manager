@@ -1,27 +1,29 @@
+import { BehaviorSubject, Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WindowResizeService implements OnDestroy {
   private windowWidthSubject = new BehaviorSubject<number>(window.innerWidth);
-  public windowWidth$ = this.windowWidthSubject.asObservable();
+  public windowWidth$: Observable<number> = this.windowWidthSubject.asObservable().pipe(distinctUntilChanged());
 
   private windowHeightSubject = new BehaviorSubject<number>(window.innerHeight);
-  public windowHeight$ = this.windowHeightSubject.asObservable();
+  public windowHeight$: Observable<number> = this.windowHeightSubject.asObservable().pipe(distinctUntilChanged());
 
   private resizeListener: () => void;
 
   constructor() {
     this.resizeListener = () => {
-      this.windowWidthSubject.next(window.innerWidth);
-      this.windowHeightSubject.next(window.innerHeight);
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      this.windowWidthSubject.next(newWidth);
+      this.windowHeightSubject.next(newHeight);
     };
 
     window.addEventListener('resize', this.resizeListener);
-    this.windowWidthSubject.next(window.innerWidth);
-    this.windowHeightSubject.next(window.innerHeight);
   }
 
   ngOnDestroy() {

@@ -8,7 +8,7 @@ import { ModalPadding, ModalPosition } from './modal.model';
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.scss',
+  styleUrl: './modal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent {

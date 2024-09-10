@@ -7,7 +7,7 @@ import { AsyncPipe } from '@angular/common';
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.scss',
+  styleUrl: './confirmation-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmationDialogComponent {

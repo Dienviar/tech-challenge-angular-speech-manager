@@ -16,7 +16,7 @@ import { FormService } from '../../core/service/form.service';
   standalone: true,
   imports: [ReactiveFormsModule, NgbAlert, ShareSpeechComponent],
   templateUrl: './upsert-speech.component.html',
-  styleUrl: './upsert-speech.component.scss',
+  styleUrl: './upsert-speech.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpsertSpeechComponent implements OnInit, OnChanges {

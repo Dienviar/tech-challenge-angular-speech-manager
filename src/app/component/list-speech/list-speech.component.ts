@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
-import { Speech } from '../speech.model';
+import { Speech, SpeechDataSortState } from '../speech.model';
 import { UpsertSpeechComponent } from '../upsert-speech/upsert-speech.component';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { WindowResizeService } from '../../core/service/window-resize.service';
@@ -39,11 +39,16 @@ export class ListSpeechComponent implements OnInit, OnDestroy, AfterViewInit {
   windowBreakPoint = 900;
   windowWidth = signal<number>(0);
   windowHeight = signal<number>(0);
+  sortSpeechDataState = signal<SpeechDataSortState>(['date_created', 'desc']);
 
   paginatedSpeechData$ = new BehaviorSubject<Speech[]>([]);
   currentPage$ = new BehaviorSubject<number>(1);
 
   ngOnInit() {
+    this._speechService.sortSpeechData$.subscribe((state) => {
+      this.sortSpeechDataState.set(state);
+    });
+
     this.setDataPages(1);
   }
 
@@ -64,7 +69,7 @@ export class ListSpeechComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subscription.add(
       this._windowResizeService.windowHeight$.subscribe((height) => {
-        const navHeight = 210;
+        const navHeight = 190;
 
         const adjustedHeight = Math.trunc(height) - navHeight;
         this.windowHeight.set(adjustedHeight);

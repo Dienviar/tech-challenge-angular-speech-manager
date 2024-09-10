@@ -1,31 +1,66 @@
-<div class="d-flex flex-column gap-4">
-  @defer {
-    <app-search-speech (searchSpeech)="onSpeechSearch($event)" />
-  }
+<div class="d-flex flex-column gap-2">
+  <div class="d-flex justify-content-end">
+    <button (click)="searchSpeechComponent.openSearchModal()" type="button" class="btn btn-secondary d-flex align-items-center gap-1">
+      <span>Search</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+      </svg>
+    </button>
+  </div>
 
   @if (totalPages() > 0) {
     <div class="row">
       <div
         [ngClass]="{ 'col-4 overflow-y-auto': windowWidth() > windowBreakPoint, 'col-12': windowWidth() < windowBreakPoint }"
         [style.height]="windowWidth() > windowBreakPoint ? windowHeight() + 'px' : 'h-auto'"
-        class="d-flex flex-column gap-3"
+        class="d-flex flex-column gap-2"
       >
-        @for (item of paginatedSpeechData$ | async; track item.id) {
-          <div #speechItem (keydown.enter)="onCardClick(item.id)" tabindex="0" class="card" [class.selected]="selectedSpeechId() === item.id" (click)="onCardClick(item.id)">
-            <div class="card-body">
-              <h5 class="card-title">{{ item.subject }}</h5>
-              <div class="date-container">
-                <span class="card-text">Author: {{ item.author }}</span>
-                <span class="card-text">Speech Date: {{ item.speech_date | date: 'MMMM d, y, h:mm a' }}</span>
-              </div>
+        <div class="sort d-flex justify-content-end gap-2">
+          <button
+            (click)="_speechService.sortSpeechData(['date_created', sortSpeechDataState()[1]])"
+            type="button"
+            [class.btn-secondary]="sortSpeechDataState()[0] !== 'date_created'"
+            [class.btn-success]="sortSpeechDataState()[0] === 'date_created'"
+            class="btn btn-secondary d-flex align-items-center gap-1"
+          >
+            <span>Date Created</span>
+            @if (sortSpeechDataState()[0] === 'date_created') {
+              <ng-container [ngTemplateOutlet]="UpDownIconTemp" [ngTemplateOutletContext]="{ sortState: sortSpeechDataState()[1] }"></ng-container>
+            }
+          </button>
 
-              <div class="date-container mt-2">
-                <span class="card-text">Date Created: {{ item.date_created | date: 'MMMM d, y, h:mm a' }}</span>
-                <span class="card-text">Date Updated: {{ (item.date_updated | date: 'MMMM d, y, h:mm a') ?? 'N/A' }}</span>
+          <button
+            (click)="_speechService.sortSpeechData(['speech_date', sortSpeechDataState()[1]])"
+            type="button"
+            [class.btn-secondary]="sortSpeechDataState()[0] !== 'speech_date'"
+            [class.btn-success]="sortSpeechDataState()[0] === 'speech_date'"
+            class="btn btn-secondary d-flex align-items-center gap-1"
+          >
+            <span>Speech Date</span>
+            @if (sortSpeechDataState()[0] === 'speech_date') {
+              <ng-container [ngTemplateOutlet]="UpDownIconTemp" [ngTemplateOutletContext]="{ sortState: sortSpeechDataState()[1] }"></ng-container>
+            }
+          </button>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
+          @for (item of paginatedSpeechData$ | async; track item.id) {
+            <div #speechItem (keydown.enter)="onCardClick(item.id)" tabindex="0" class="card" [class.selected]="selectedSpeechId() === item.id" (click)="onCardClick(item.id)">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.subject }}</h5>
+                <div class="date-container">
+                  <span class="card-text">Author: {{ item.author }}</span>
+                  <span class="card-text">Speech Date: {{ item.speech_date | date: 'MMMM d, y, h:mm a' }}</span>
+                </div>
+
+                <div class="date-container mt-2">
+                  <span class="card-text">Date Created: {{ item.date_created | date: 'MMMM d, y, h:mm a' }}</span>
+                  <span class="card-text">Date Updated: {{ (item.date_updated | date: 'MMMM d, y, h:mm a') ?? 'N/A' }}</span>
+                </div>
               </div>
             </div>
-          </div>
-        }
+          }
+        </div>
 
         <div class="w-100 position-relative d-flex justify-content-center gap-2">
           <ul class="pagination py-2">
@@ -87,5 +122,21 @@
         <h5 class="card-title">There is no selected speech to view</h5>
       </div>
     </div>
+  }
+</ng-template>
+
+@defer {
+  <app-search-speech (searchSpeech)="onSpeechSearch($event)" />
+}
+
+<ng-template #UpDownIconTemp let-sortState="sortState">
+  @if (sortState === 'asc') {
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5" />
+    </svg>
+  } @else {
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
+    </svg>
   }
 </ng-template>

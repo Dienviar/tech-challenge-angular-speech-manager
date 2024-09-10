@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Speech } from './speech.model';
+import { Speech, SpeechDataSortState } from './speech.model';
 import { ResponseObj } from '../core/interface';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,7 +11,7 @@ export class SpeechService {
     {
       id: uuidv4(),
       subject: 'The Power of Angular in Modern Web Development',
-      speech_date: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
+      speech_date: new Date('Sat Sep 010 2024 12:42:54 GMT+0800 (Philippine Standard Time)'),
       author: 'Denver Danniel Reyes',
       content: `Good morning, everyone!
 
@@ -26,8 +26,8 @@ A big advantage is that Angular supports cross-platform development. With tools 
 In summary, Angular offers a complete solution for web development. It's a framework that can grow with your project, from small apps to enterprise-level systems. If you haven't explored Angular yet, it's definitely worth your time!
 
 Thank you!`,
-      date_created: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)'),
-      date_updated: new Date('Sat Sep 07 2024 22:42:54 GMT+0800 (Philippine Standard Time)')
+      date_created: new Date('Sat Sep 10 2024 12:42:54 GMT+0800 (Philippine Standard Time)'),
+      date_updated: new Date('Sat Sep 10 2024 12:42:54 GMT+0800 (Philippine Standard Time)')
     },
     {
       id: uuidv4(),
@@ -43,30 +43,19 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
     {
       id: uuidv4(),
       subject: 'Hard Work',
-      speech_date: new Date('Sat Sep 10 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
+      speech_date: new Date('Sat Sep 09 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
       author: 'Steve Jobs',
       content: `Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do.`,
-      date_created: new Date('Sat Sep 09 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
+      date_created: new Date('Sat Sep 08 2024 8:30:54 GMT+0800 (Philippine Standard Time)'),
       date_updated: undefined
     }
   ];
 
-  constructor() {
-    for (let i = 0; i < 30; i++) {
-      this.speechData.push({
-        id: uuidv4(),
-        subject: Math.random().toString(36).substring(7),
-        speech_date: new Date(),
-        author: '',
-        content: '',
-        date_created: new Date(),
-        date_updated: undefined
-      });
-    }
-  }
-
   private speechSubject: BehaviorSubject<Speech[]> = new BehaviorSubject<Speech[]>(this.speechData);
   public speechData$: Observable<Speech[]> = this.speechSubject.asObservable();
+
+  private sortSpeechDataSubject: BehaviorSubject<SpeechDataSortState> = new BehaviorSubject<SpeechDataSortState>(['date_created', 'desc']);
+  public sortSpeechData$: Observable<SpeechDataSortState> = this.sortSpeechDataSubject.asObservable();
 
   manualSpeechSubjectNotify() {
     this.speechSubject.next(this.speechData);
@@ -94,7 +83,7 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
 
     const exists = this.speechData.some((s) => s.id === speech.id);
     if (!exists) {
-      this.speechData.push(speech);
+      this.speechData.unshift(speech);
       this.speechSubject.next(this.speechData);
       return { code: 200, message: 'Speech has been created', label: 'success' };
     }
@@ -163,5 +152,35 @@ JavaScript is everywhere. Whether you're browsing social media, shopping online,
         } as ResponseObj;
       })
     );
+  }
+
+  sortSpeechData(sortState: SpeechDataSortState) {
+    const [type, state] = sortState;
+    const newState = state === 'asc' ? 'desc' : 'asc';
+
+    const speechData = this.speechSubject.getValue();
+    if (!speechData) return;
+
+    const compareDates = (a: string | Date | null | undefined, b: string | Date | null | undefined, isAsc: boolean) => {
+      const dateA = a ? new Date(a).getTime() : 0;
+      const dateB = b ? new Date(b).getTime() : 0;
+
+      return isAsc ? dateA - dateB : dateB - dateA;
+    };
+
+    let sortedData = [...speechData];
+    switch (type) {
+      case 'date_created':
+        sortedData = sortedData.sort((a, b) => compareDates(a.date_created, b.date_created, newState === 'asc'));
+        break;
+      case 'speech_date':
+        sortedData = sortedData.sort((a, b) => compareDates(a.speech_date, b.speech_date, newState === 'asc'));
+        break;
+      default:
+        return;
+    }
+
+    this.speechSubject.next(sortedData);
+    this.sortSpeechDataSubject.next([type, newState]);
   }
 }

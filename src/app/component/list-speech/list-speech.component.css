@@ -50,6 +50,14 @@
   border: none;
 }
 
+.sort button {
+  height: 30px;
+}
+
+.sort button span {
+  font-size: 12px;
+}
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;

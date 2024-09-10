@@ -7,3 +7,5 @@ export interface Speech {
   date_created: Date;
   date_updated: Date | undefined;
 }
+
+export type SpeechDataSortState = ['date_created', 'asc'] | ['date_created', 'desc'] | ['speech_date', 'asc'] | ['speech_date', 'desc'];
